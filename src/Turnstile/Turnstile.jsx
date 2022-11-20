@@ -4,7 +4,6 @@ import { Button, Card, Col, message, notification, Row, Statistic } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
 import { ArrowUpOutlined, FrownOutlined } from "@ant-design/icons";
-import { useData } from "../Hook/UseData";
 
 const Turnstile = () => {
     const [outcomeSocks, setOutcomeSocks] = useState([]);
@@ -12,7 +11,6 @@ const Turnstile = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { dataTurnstileData } = useData();
     const navigate = useNavigate();
 
     const getOutcomeSocks = (current, pageSize) => {
@@ -20,7 +18,6 @@ const Turnstile = () => {
         instance
             .get(`api/turnstile/position/page?page=${current}&size=${pageSize}`)
             .then((data) => {
-                dataTurnstileData()
                 setOutcomeSocks(data.data?.data?.materials);
                 setTotalItems(data.data?.data?.totalItems);
             })

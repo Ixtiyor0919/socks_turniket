@@ -1,4 +1,4 @@
-import { InputNumber } from "antd";
+import { InputNumber, Input } from "antd";
 import { createContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import instance from "../Api/Axios";
@@ -16,7 +16,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "name",
             label: "Ismi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: <Input style={{ width: "100%" }} />,
         },
         {
             name: "hourlyWages",
@@ -29,7 +29,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "name",
             label: "Ismi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: <Input style={{ width: "100%" }} />,
         },
         {
             name: "hourlyWages",
@@ -40,29 +40,55 @@ export const DataProvider = ({ children }) => {
 
     const workerData = [
         {
-            name: "name",
+            name: "fio",
             label: "Ismi",
+            input: <Input style={{ width: "100%" }} />,
+        },
+        {
+            name: "phoneNumber",
+            label: "Ishchining nomeri",
             input: <InputNumber style={{ width: "100%" }} />,
         },
         {
-            name: "hourlyWages",
-            label: "Soatlik ish haqi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            name: "positionId",
+            label: "positionId",
+            input: <Input style={{ width: "100%" }} />,
         },
     ];
 
     const editWorkerData = [
         {
-            name: "name",
+            name: "fio",
             label: "Ismi",
-            input: <InputNumber style={{ width: "100%" }} />,
+            input: <Input style={{ width: "100%" }} />,
         },
         {
-            name: "hourlyWages",
+            name: "phoneNumber",
             label: "Soatlik ish haqi",
+            input: <Input style={{ width: "100%" }} />,
+        },
+        {
+            name: "positionId",
+            label: "positionId",
             input: <InputNumber style={{ width: "100%" }} />,
         },
     ];
+
+
+    const userData = (token) => {
+        instance
+            .get("https://socks-heroku-java.herokuapp.com/api/socks/factory/user/current", {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((data) => {
+                setUserLoading(false);
+                setUserData(data.data.data);
+            })
+            .catch((err) => {
+                setUserLoading(false);
+                console.error(err);
+            });
+    };
 
     const getTurnstileData = () => {
         instance
@@ -85,12 +111,13 @@ export const DataProvider = ({ children }) => {
     useEffect(() => {
         getUserData();
         getTurnstileData();
+        userData()
     }, []);
 
     let formData = {};
 
     switch (location.pathname) {
-        case "/home": {
+        case "/": {
             formData = {
                 formData: turnstileData,
                 editFormData: editTurnstileData,

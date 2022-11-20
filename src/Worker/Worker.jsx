@@ -34,7 +34,7 @@ const Worker = () => {
             title: "Ishchining ismi",
             dataIndex: "fio",
             key: "fio",
-            width: "25%",
+            width: "50%",
             search: false,
             sorter: (a, b) => {
                 if (a.fio < b.fio) {
@@ -50,7 +50,7 @@ const Worker = () => {
             title: "Soatlik ish haqi",
             dataIndex: "phoneNumber",
             key: "phoneNumber",
-            width: "25%",
+            width: "50%",
             search: false,
             sorter: (a, b) => {
                 if (a.phoneNumber < b.phoneNumber) {
@@ -87,6 +87,8 @@ const Worker = () => {
         instance
             .put(`api/turnstile/worker/update/${initial.id}`, {
                 ...values,
+                workerUuid: initial.id,
+                delete: false,
             })
             .then((res) => {
                 message.success("Klient muvaffaqiyatli taxrirlandi");
