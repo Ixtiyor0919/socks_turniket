@@ -6,11 +6,8 @@ import instance from "../Api/Axios";
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
-    const [userLoading, setUserLoading] = useState(true);
     const [dataTurnstileData, setTurnstileData] = useState([]);
-    const [user, setUserData] = useState([]);
     let location = useLocation();
-
 
     const turnstileData = [
         {
@@ -74,22 +71,6 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
-
-    const userData = (token) => {
-        instance
-            .get("https://socks-heroku-java.herokuapp.com/api/socks/factory/user/current", {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then((data) => {
-                setUserLoading(false);
-                setUserData(data.data.data);
-            })
-            .catch((err) => {
-                setUserLoading(false);
-                console.error(err);
-            });
-    };
-
     const getTurnstileData = () => {
         instance
             .get("api/turnstile/position/list")
@@ -99,19 +80,8 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
-    const getUserData = () => {
-        instance
-            .get("https://socks-heroku-java.herokuapp.com/api/socks/factory/user")
-            .then((data) => {
-                setUserData(data.data.data);
-            })
-            .catch((err) => console.error(err));
-    };
-
     useEffect(() => {
-        getUserData();
         getTurnstileData();
-        userData()
     }, []);
 
     let formData = {};
@@ -155,8 +125,6 @@ export const DataProvider = ({ children }) => {
     const value = {
         formData,
         dataTurnstileData,
-        userLoading,
-        user
     };
 
     return (
