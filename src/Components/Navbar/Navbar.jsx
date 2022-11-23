@@ -5,20 +5,16 @@ import {
     MenuOutlined,
     UserOutlined,
     LogoutOutlined,
-    BellOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
-import { useData } from "../../Hook/UseData";
 import useToken from "../../Hook/UseToken";
 import DrapdownMenu from "../DrapdownMenu/DrapdownMenu";
 import socks2 from "./socks2.png";
-import Notification from "../Notification/Notification";
 
 const { Header } = Layout;
 
 function Navbar() {
     const [isVisible, setIsVisible] = useState(false);
-    const { user } = useData();
     const { token } = useToken();
     const location = useLocation();
 
@@ -55,23 +51,6 @@ function Navbar() {
                         </Link>
                     ),
                 },
-                user.roleId === 1
-                    ? {
-                          key: "/notification",
-                          icon: <BellOutlined />,
-                          label: (
-                              <Link
-                                  to="/notification"
-                                  style={{
-                                      width: "100px",
-                                      display: "inline-block",
-                                  }}
-                              >
-                                  Eslatmalar
-                              </Link>
-                          ),
-                      }
-                    : null,
                 {
                     key: "3",
                     danger: true,
@@ -119,11 +98,6 @@ function Navbar() {
                         />
                     </Link>
                 </div>
-                {user.roleId === 1 ? (
-                    <div className="notification">
-                        <Notification />
-                    </div>
-                ) : null}
                 <Menu
                     style={{ width: "75%" }}
                     className="inline-navber"
@@ -152,7 +126,7 @@ function Navbar() {
                                     />
                                 </Link>
                             ),
-                        }
+                        },
                     ]}
                 />
                 <span
@@ -163,7 +137,6 @@ function Navbar() {
                         alignItems: "center",
                     }}
                 >
-                    {user.roleId === 1 ? <Notification /> : null}
                     <Dropdown overlay={menu} placement="bottomRight" arrow>
                         <Avatar
                             size="middle"
@@ -172,7 +145,7 @@ function Navbar() {
                                 backgroundColor: "#fde3cf",
                             }}
                         >
-                            {user?.fio?.charAt(0)}
+                            {"Admin".charAt(0)}
                         </Avatar>
                     </Dropdown>
                 </span>

@@ -6,7 +6,6 @@ import Loading from "../Components/Loading";
 import "./Login.css";
 import rasm from "./loginPicture.jpg";
 import { FrownOutlined } from "@ant-design/icons";
-import axios from "axios";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -14,31 +13,18 @@ const Login = () => {
     let navigate = useNavigate();
 
     const onFinish = (values) => {
-        setLoading(true);
-        axios
-            .post(
-                "https://socks-heroku-java.herokuapp.com/api/socks/factory/auth/login",
-                {
-                    username: values.phoneNumber,
-                    password: values.password,
-                }
-            )
-            .then((data) => {
-                setToken(data.data.data, values.remember);
-                window.location.href = "/";
-            })
-            .catch((err) => {
-                notification["error"]({
-                    message: "Kirishda xatolik",
-                    description:
-                        "Telefon nomer yoki parolni noto'g'ri kiritdingiz.",
-                    duration: 3,
-                    icon: <FrownOutlined style={{ color: "#f00" }} />,
-                });
-                setLoading(false);
-                console.error(err);
-                navigate("/login");
+        if (values.phoneNumber === "123456" && values.password === "123456") {
+            setToken("socksToken", values.remember);
+            window.location.href = "/";
+        } else {
+            notification["error"]({
+                message: "Kirishda xatolik",
+                description:
+                    "Telefon nomer yoki parolni noto'g'ri kiritdingiz.",
+                duration: 3,
+                icon: <FrownOutlined style={{ color: "#f00" }} />,
             });
+        }
     };
 
     const onFinishFailed = (errorInfo) => {

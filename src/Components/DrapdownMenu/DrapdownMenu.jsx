@@ -12,14 +12,11 @@ import {
     AppstoreOutlined,
     CloudSyncOutlined,
     CloudServerOutlined,
-    BellOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
-import { useData } from "../../Hook/UseData";
 
 function DrapdownMenu({ onClose, isVisible }) {
     const { token } = useToken();
-    const { user } = useData();
     const location = useLocation();
 
     const handleLogOut = (e) => {
@@ -167,21 +164,6 @@ function DrapdownMenu({ onClose, isVisible }) {
                                     </Link>
                                 ),
                             },
-                            user.roleId === 1
-                                ? {
-                                      label: "Foydalanuvchilar",
-                                      key: "/users",
-                                      icon: (
-                                          <Link to="/users">
-                                              <UserOutlined
-                                                  style={{
-                                                      fontSize: "18px",
-                                                  }}
-                                              />
-                                          </Link>
-                                      ),
-                                  }
-                                : null,
                             {
                                 label: "Boshqalar",
                                 key: "/others",
@@ -204,23 +186,6 @@ function DrapdownMenu({ onClose, isVisible }) {
                             </Link>
                         ),
                     },
-                    user.roleId === 1
-                        ? {
-                              key: "/notification",
-                              icon: <BellOutlined />,
-                              label: (
-                                  <Link
-                                      to="/notification"
-                                      style={{
-                                          width: "100px",
-                                          display: "inline-block",
-                                      }}
-                                  >
-                                      Eslatmalar
-                                  </Link>
-                              ),
-                          }
-                        : null,
                     {
                         label: "Chiqish",
                         key: "/logout",
