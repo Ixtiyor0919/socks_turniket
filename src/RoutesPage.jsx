@@ -5,6 +5,8 @@ import Error500 from "./Module/ErrorPages/Error500";
 import Turnstile from "./Turnstile/Turnstile";
 import Login from "./Login/Login";
 import Worker from "./Worker/Worker";
+import Salary from "./Salary/Salary";
+import WorkingTimes from "./WorkingTimes/WorkingTimes";
 
 const RoutesPage = () => {
     return (
@@ -13,7 +15,9 @@ const RoutesPage = () => {
                 <Route element={<LayoutMenu />}>
                     <Route index element={<Turnstile />} />
                     <Route path="home" element={<Turnstile />} />
-                    <Route path="worker" element={<Worker />} />
+                    <Route path="workers" element={<Worker />} />
+                    <Route path="working-times" element={<WorkingTimes />} />
+                    <Route path="salary" element={<Salary />} />
                 </Route>
                 <Route path="login" element={<Login />} />
                 <Route path="*" element={<Error404 />} />

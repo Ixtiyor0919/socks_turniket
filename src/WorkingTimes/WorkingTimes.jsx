@@ -3,27 +3,37 @@ import instance from "../Api/Axios";
 import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../Hook/UseData";
+import moment from "moment";
 
-const Worker = () => {
+const WorkingTimes = () => {
     const [outcomeSocks, setOutcomeSocks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
     const navigate = useNavigate();
+    const { workerData } = useData()
 
     const getOutcomeSocks = (current, pageSize) => {
         setLoading(true);
         instance
-            .get(`api/turnstile/worker/getAllPageable?page=${current}&size=${pageSize}`)
+            .get(`api/turnstile/workingTimes/getAllPageable?page=${current}&size=${pageSize}`)
             .then((data) => {
-                setOutcomeSocks(data.data?.data?.branches);
+                const apiData = data.data?.data?.allWorkers.map((item) => {
+                    return {
+                        ...item,
+                        startTime: moment(item.startTime).format("DD-MM-YYYY"),
+                        endTime: moment(item.endTime).format("DD-MM-YYYY"),
+                    };
+                });
+                setOutcomeSocks(apiData);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Ishchilarni yuklashda muammo bo'ldi");
+                message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
@@ -31,31 +41,54 @@ const Worker = () => {
     const columns = [
         {
             title: "Ishchining ismi",
-            dataIndex: "fio",
-            key: "fio",
-            width: "50%",
+            dataIndex: "workerId",
+            key: "workerId",
+            width: "33%",
             search: false,
+            render: (record) => {
+                const data = workerData?.filter(
+                    (item) => item.id === record
+                );
+                return data[0]?.fio;
+            },
             sorter: (a, b) => {
-                if (a.fio < b.fio) {
+                if (a.workerId < b.workerId) {
                     return -1;
                 }
-                if (a.fio > b.fio) {
+                if (a.workerId > b.workerId) {
                     return 1;
                 }
                 return 0;
             },
         },
         {
-            title: "Soatlik ish haqi",
-            dataIndex: "phoneNumber",
-            key: "phoneNumber",
-            width: "50%",
+            title: "Boshlanish vaqti",
+            dataIndex: "startTime",
+            key: "startTime",
+            width: "33%",
             search: false,
             sorter: (a, b) => {
-                if (a.phoneNumber < b.phoneNumber) {
+                if (a.startTime < b.startTime) {
                     return -1;
                 }
-                if (a.phoneNumber > b.phoneNumber) {
+                if (a.startTime > b.startTime) {
+                    return 1;
+                }
+                return 0;
+            },
+            // format("DD-MM-YYYY"),
+        },
+        {
+            title: "Tugash vaqti",
+            dataIndex: "endTime",
+            key: "endTime",
+            width: "33%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.endTime < b.endTime) {
+                    return -1;
+                }
+                if (a.endTime > b.endTime) {
                     return 1;
                 }
                 return 0;
@@ -74,7 +107,7 @@ const Worker = () => {
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("ishchini qo'shishda muammo bo'ldi");
+                message.error("Klientni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -90,13 +123,13 @@ const Worker = () => {
                 delete: false,
             })
             .then((res) => {
-                message.success("ishchi muvaffaqiyatli taxrirlandi");
+                message.success("Klient muvaffaqiyatli taxrirlandi");
                 getOutcomeSocks(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("ishchini taxrirlashda muammo bo'ldi");
+                message.error("Klientni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -104,32 +137,32 @@ const Worker = () => {
         setLoading(true);
     };
 
-    const handleDelete = (arr) => {
-        setLoading(true);
-        arr.map((item) => {
-            instance
-                .delete(`api/turnstile/worker/delete/${item}`)
-                .then((data) => {
-                    getOutcomeSocks(current - 1, pageSize);
-                    message.success("ishchi muvaffaqiyatli o'chirildi");
-                })
-                .catch((error) => {
-                    console.error(error);
-                    if (error.response?.status === 500)
-                        navigate("/server-error");
-                    message.error("ishchini o'chirishda muammo bo'ldi");
-                })
-                .finally(() => setLoading(false));
-            return null;
-        });
-    };
+    // const handleDelete = (arr) => {
+    //     setLoading(true);
+    //     arr.map((item) => {
+    //         instance
+    //             .delete(`api/turnstile/worker/delete/${item}`)
+    //             .then((data) => {
+    //                 getOutcomeSocks(current - 1, pageSize);
+    //                 message.success("Klient muvaffaqiyatli o'chirildi");
+    //             })
+    //             .catch((error) => {
+    //                 console.error(error);
+    //                 if (error.response?.status === 500)
+    //                     navigate("/server-error");
+    //                 message.error("Klientni o'chirishda muammo bo'ldi");
+    //             })
+    //             .finally(() => setLoading(false));
+    //         return null;
+    //     });
+    // };
 
     return (
         <>
             <CustomTable
                 onEdit={onEdit}
                 onCreate={onCreate}
-                onDelete={handleDelete}
+                // onDelete={handleDelete}
                 getData={getOutcomeSocks}
                 columns={columns}
                 tableData={outcomeSocks}
@@ -146,4 +179,4 @@ const Worker = () => {
     );
 };
 
-export default Worker;
+export default WorkingTimes;

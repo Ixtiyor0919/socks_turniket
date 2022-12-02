@@ -12,8 +12,10 @@ import {
     AppstoreOutlined,
     CloudSyncOutlined,
     CloudServerOutlined,
+    ClockCircleOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
+import turnstileLogo from "./turnstileLogo.jpg";
 
 function DrapdownMenu({ onClose, isVisible }) {
     const { token } = useToken();
@@ -36,6 +38,17 @@ function DrapdownMenu({ onClose, isVisible }) {
             onClose={onClose}
             visible={isVisible}
         >
+              <div className="logo" style={{ marginRight: "5%" }}>
+                    <Link to="/" style={{ marginTop: "3px", display: "block" }}>
+                        <img
+                            src={turnstileLogo}
+                            alt="img-logo"
+                            width={70}
+                            height={40}
+                        />
+                        {/* Socks Turnstile */}
+                    </Link>
+                </div>
             <Menu
                 style={{
                     height: "120%",
@@ -51,131 +64,43 @@ function DrapdownMenu({ onClose, isVisible }) {
                         icon: (
                             <Link to="/">
                                 <DashboardOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
-                        ),
-                    },
-                    {
-                        label: "Material",
-                        key: "/material",
-                        icon: (
-                            <Link to="/material">
-                                <CloudSyncOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
-                        ),
-                    },
-                    {
-                        label: "Kelgan Materiallar",
-                        key: "/income-material",
-                        icon: (
-                            <Link to="/income-material">
-                                <CloudDownloadOutlined
                                     style={{ fontSize: "18px" }}
                                 />
                             </Link>
                         ),
                     },
                     {
-                        label: "Ishlatilgan Materiallar",
-                        key: "/outcome-material",
+                        label: "Ishchilar",
+                        key: "/workers",
                         icon: (
-                            <Link to="/outcome-material">
-                                <CloudSyncOutlined
+                            <Link to="/workers">
+                                <TeamOutlined
                                     style={{ fontSize: "18px" }}
                                 />
                             </Link>
                         ),
                     },
                     {
-                        label: "Naskilar",
-                        key: "/socks",
+                        label: "Ish vaqti",
+                        key: "/worker-times",
                         icon: (
-                            <Link to="/socks">
-                                <CloudServerOutlined
-                                    style={{ fontSize: "20px" }}
-                                />
-                            </Link>
-                        ),
-                    },
-                    {
-                        label: "Sotilgan Naskilar",
-                        key: "/outcome",
-                        icon: (
-                            <Link to="/outcome">
-                                <CloudUploadOutlined
+                            <Link to="/worker-times">
+                                <ClockCircleOutlined 
                                     style={{ fontSize: "18px" }}
                                 />
                             </Link>
                         ),
-                        children: [
-                            {
-                                label: "Sotilgan Naskilar",
-                                key: "/outcome-socks",
-                                icon: (
-                                    <Link to="/outcome-socks">
-                                        <DollarCircleOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
-                            {
-                                label: "Ko'proq sotish",
-                                key: "/outcome-nakladnoy",
-                                icon: (
-                                    <Link to="/outcome-nakladnoy">
-                                        <DollarCircleOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
-                        ],
                     },
                     {
-                        label: "Qarzlar",
-                        key: "/debts",
+                        label: "Ish haqi",
+                        key: "/salary",
                         icon: (
-                            <Link to="/debts">
-                                <DollarCircleOutlined
-                                    style={{ fontSize: "20px" }}
+                            <Link to="/salary">
+                                <DollarCircleOutlined 
+                                    style={{ fontSize: "18px" }}
                                 />
                             </Link>
                         ),
-                    },
-                    {
-                        label: "Qo'shimchalar",
-                        key: "others",
-                        icon: (
-                            <AppstoreAddOutlined style={{ fontSize: "20px" }} />
-                        ),
-                        children: [
-                            {
-                                label: "Klientlar",
-                                key: "/clients",
-                                icon: (
-                                    <Link to="/clients">
-                                        <TeamOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
-                            {
-                                label: "Boshqalar",
-                                key: "/others",
-                                icon: (
-                                    <Link to="/others">
-                                        <AppstoreOutlined
-                                            style={{ fontSize: "18px" }}
-                                        />
-                                    </Link>
-                                ),
-                            },
-                        ],
                     },
                     {
                         label: "Profil",

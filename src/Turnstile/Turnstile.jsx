@@ -1,9 +1,8 @@
 import { useState } from "react";
 import instance from "../Api/Axios";
-import { Button, Card, Col, message, notification, Row, Statistic } from "antd";
+import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
-import { ArrowUpOutlined, FrownOutlined } from "@ant-design/icons";
 
 const Turnstile = () => {
     const [outcomeSocks, setOutcomeSocks] = useState([]);
@@ -125,26 +124,6 @@ const Turnstile = () => {
 
     return (
         <>
-            {/* <div
-                style={{ marginBottom: "20px" }}
-                className="site-statistic-demo-card"
-            >
-                <Row gutter={[10, 10]}>
-                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                        <Card>
-                            <Statistic
-                                title="Jami sarflangan summa"
-                                value={totalsum?.totalSumma}
-                                valueStyle={{
-                                    color: "#3f8600",
-                                }}
-                                prefix={<ArrowUpOutlined />}
-                                suffix="So'm"
-                            />
-                        </Card>
-                    </Col>
-                </Row>
-            </div> */}
             <CustomTable
                 onEdit={onEdit}
                 onCreate={onCreate}

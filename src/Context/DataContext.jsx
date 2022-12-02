@@ -7,6 +7,7 @@ export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
     const [dataTurnstileData, setTurnstileData] = useState([]);
+    const [workerData, setWorkerData] = useState([]);
     let location = useLocation();
 
     const turnstileData = [
@@ -35,7 +36,7 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
-    const workerData = [
+    const formWorkerData = [
         {
             name: "fio",
             label: "Ismi",
@@ -71,7 +72,7 @@ export const DataProvider = ({ children }) => {
         },
     ];
 
-    const getTurnstileData = () => {
+    const getPositionData = () => {
         instance
             .get("api/turnstile/position/list")
             .then((data) => {
@@ -80,8 +81,18 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
+    const getWorkerData = () => {
+        instance
+            .get("api/turnstile/worker/getAll")
+            .then((data) => {
+                setWorkerData(data.data.data);
+            })
+            .catch((err) => console.error(err));
+    };
+
     useEffect(() => {
-        getTurnstileData();
+        getPositionData();
+        getWorkerData();
     }, []);
 
     let formData = {};
@@ -102,9 +113,9 @@ export const DataProvider = ({ children }) => {
             };
             break;
         }
-        case "/worker": {
+        case "/workers": {
             formData = {
-                formData: workerData,
+                formData: formWorkerData,
                 editFormData: editWorkerData,
                 branchData: false,
                 timeFilterInfo: false,
@@ -125,6 +136,7 @@ export const DataProvider = ({ children }) => {
     const value = {
         formData,
         dataTurnstileData,
+        workerData
     };
 
     return (

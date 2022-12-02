@@ -6,6 +6,7 @@ import Loading from "../Components/Loading";
 import "./Login.css";
 import rasm from "./loginPicture.jpg";
 import { FrownOutlined } from "@ant-design/icons";
+import turnstileLogo from './turnstileLogo.jpg'
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -45,8 +46,8 @@ const Login = () => {
     return (
         <div className="login-page">
             <div className="login-box">
-                <div className="illustration-wrapper">
-                    <img src={rasm} alt="Login" />
+                <div className="illustration-wrapper" style={{height: '70vh'}}>
+                    <img src={turnstileLogo} alt="Login" styele={{display: 'block'}} />
                 </div>
                 <Form
                     name="login-form"

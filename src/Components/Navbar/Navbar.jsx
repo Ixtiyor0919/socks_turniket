@@ -5,11 +5,15 @@ import {
     MenuOutlined,
     UserOutlined,
     LogoutOutlined,
+    TeamOutlined,
+    DollarCircleOutlined,
+    ClockCircleOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import useToken from "../../Hook/UseToken";
 import DrapdownMenu from "../DrapdownMenu/DrapdownMenu";
-import socks2 from "./socks2.png";
+import turnstileLogo from "./turnstileLogo.jpg";
+import socksLogo from "./socksLogo.png";
 
 const { Header } = Layout;
 
@@ -91,7 +95,7 @@ function Navbar() {
                 <div className="logo" style={{ marginRight: "5%" }}>
                     <Link to="/" style={{ marginTop: "3px", display: "block" }}>
                         <img
-                            src={socks2}
+                            src={socksLogo}
                             alt="img-logo"
                             width={70}
                             height={40}
@@ -117,11 +121,33 @@ function Navbar() {
                             ),
                         },
                         {
-                            label: "Worker",
-                            key: "/worker",
+                            label: "Ishchilar",
+                            key: "/workers",
                             icon: (
-                                <Link to="/worker">
-                                    <DashboardOutlined
+                                <Link to="/workers">
+                                    <TeamOutlined
+                                        style={{ fontSize: "18px" }}
+                                    />
+                                </Link>
+                            ),
+                        },
+                        {
+                            label: "Ish vaqti",
+                            key: "/working-times",
+                            icon: (
+                                <Link to="/working-times">
+                                    <ClockCircleOutlined 
+                                        style={{ fontSize: "18px" }}
+                                    />
+                                </Link>
+                            ),
+                        },
+                        {
+                            label: "Ish haqi",
+                            key: "/salary",
+                            icon: (
+                                <Link to="/salary">
+                                    <DollarCircleOutlined 
                                         style={{ fontSize: "18px" }}
                                     />
                                 </Link>
