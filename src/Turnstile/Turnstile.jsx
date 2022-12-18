@@ -23,7 +23,7 @@ const Turnstile = () => {
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
+                message.error("Lavozimlarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
@@ -68,13 +68,13 @@ const Turnstile = () => {
         instance
             .post("api/turnstile/position", { ...values })
             .then(function (response) {
-                message.success("Klient muvaffaqiyatli qo'shildi");
+                message.success("Lavozim muvaffaqiyatli qo'shildi");
                 getOutcomeSocks(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Klientni qo'shishda muammo bo'ldi");
+                message.error("Lavozim qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -88,13 +88,13 @@ const Turnstile = () => {
                 ...values,
             })
             .then((res) => {
-                message.success("Klient muvaffaqiyatli taxrirlandi");
+                message.success("Lavozim muvaffaqiyatli taxrirlandi");
                 getOutcomeSocks(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Klientni taxrirlashda muammo bo'ldi");
+                message.error("Lavozimni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -109,13 +109,13 @@ const Turnstile = () => {
                 .delete(`api/turnstile/position?positionId=${item}`)
                 .then((data) => {
                     getOutcomeSocks(current - 1, pageSize);
-                    message.success("Klient muvaffaqiyatli o'chirildi");
+                    message.success("Lavozim muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
                     console.error(error);
                     if (error.response?.status === 500)
                         navigate("/server-error");
-                    message.error("Klientni o'chirishda muammo bo'ldi");
+                    message.error("Lavozimni o'chirishda muammo bo'ldi");
                 })
                 .finally(() => setLoading(false));
             return null;

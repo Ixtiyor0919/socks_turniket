@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { AxiosInterceptor } from "./Api/Axios";
+import { AxiosInterceptor, Map } from "./Api/Axios";
 import { DataProvider } from "./Context/DataContext";
 import useToken from "./Hook/UseToken";
 import Login from "./Login/Login";
@@ -21,7 +21,7 @@ function App() {
             {token ? (
                 <DataProvider>
                     <AxiosInterceptor>
-                        <RoutesPage />
+                            <RoutesPage />
                     </AxiosInterceptor>
                 </DataProvider>
             ) : null}

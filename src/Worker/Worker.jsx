@@ -3,6 +3,7 @@ import instance from "../Api/Axios";
 import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../Hook/UseData";
 
 const Worker = () => {
     const [outcomeSocks, setOutcomeSocks] = useState([]);
@@ -10,6 +11,7 @@ const Worker = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
+    const { dataTurnstileData } = useData();
     const navigate = useNavigate();
 
     const getOutcomeSocks = (current, pageSize) => {
@@ -33,13 +35,33 @@ const Worker = () => {
             title: "Ishchining ismi",
             dataIndex: "fio",
             key: "fio",
-            width: "50%",
+            width: "33%",
             search: false,
             sorter: (a, b) => {
                 if (a.fio < b.fio) {
                     return -1;
                 }
                 if (a.fio > b.fio) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Lavozimlar",
+            dataIndex: "positionId",
+            key: "positionId",
+            width: "33%",
+            search: false,
+            render: (record) => {
+                const data = dataTurnstileData?.filter((item) => item.id === record);
+                return data[0]?.name;
+            },
+            sorter: (a, b) => {
+                if (a.positionId < b.positionId) {
+                    return -1;
+                }
+                if (a.positionId > b.positionId) {
                     return 1;
                 }
                 return 0;
@@ -68,13 +90,13 @@ const Worker = () => {
         instance
             .post("api/turnstile/worker/add", { ...values })
             .then(function (response) {
-                message.success("Klient muvaffaqiyatli qo'shildi");
+                message.success("Ishchi muvaffaqiyatli qo'shildi");
                 getOutcomeSocks(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("ishchini qo'shishda muammo bo'ldi");
+                message.error("Ishchini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -86,17 +108,17 @@ const Worker = () => {
         instance
             .put(`api/turnstile/worker/update/${initial.id}`, {
                 ...values,
-                workerUuid: initial.id,
+                id: initial.id,
                 delete: false,
             })
             .then((res) => {
-                message.success("ishchi muvaffaqiyatli taxrirlandi");
+                message.success("Ishchi muvaffaqiyatli taxrirlandi");
                 getOutcomeSocks(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("ishchini taxrirlashda muammo bo'ldi");
+                message.error("Ishchini taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);

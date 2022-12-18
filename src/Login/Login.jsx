@@ -47,7 +47,7 @@ const Login = () => {
         <div className="login-page">
             <div className="login-box">
                 <div className="illustration-wrapper" style={{height: '70vh'}}>
-                    <img src={turnstileLogo} alt="Login" styele={{display: 'block'}} />
+                    <img src={turnstileLogo} alt="Login" styele={{width: '100%'}} />
                 </div>
                 <Form
                     name="login-form"

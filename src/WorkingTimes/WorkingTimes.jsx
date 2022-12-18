@@ -13,12 +13,14 @@ const WorkingTimes = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
     const navigate = useNavigate();
-    const { workerData } = useData()
+    const { workerData } = useData();
 
     const getOutcomeSocks = (current, pageSize) => {
         setLoading(true);
         instance
-            .get(`api/turnstile/workingTimes/getAllPageable?page=${current}&size=${pageSize}`)
+            .get(
+                `api/turnstile/workingTimes/getAllPageable?page=${current}&size=${pageSize}`
+            )
             .then((data) => {
                 const apiData = data.data?.data?.allWorkers.map((item) => {
                     return {
@@ -33,7 +35,7 @@ const WorkingTimes = () => {
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Sotilgan naskilarni yuklashda muammo bo'ldi");
+                message.error("Ish vaqtlarini yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
@@ -46,9 +48,7 @@ const WorkingTimes = () => {
             width: "33%",
             search: false,
             render: (record) => {
-                const data = workerData?.filter(
-                    (item) => item.id === record
-                );
+                const data = workerData?.filter((item) => item.id === record);
                 return data[0]?.fio;
             },
             sorter: (a, b) => {
@@ -76,7 +76,6 @@ const WorkingTimes = () => {
                 }
                 return 0;
             },
-            // format("DD-MM-YYYY"),
         },
         {
             title: "Tugash vaqti",
@@ -99,15 +98,15 @@ const WorkingTimes = () => {
     const onCreate = (values) => {
         setLoading(true);
         instance
-            .post("api/turnstile/worker/add", { ...values })
+            .post("api/turnstile/workingTimes/add", { ...values })
             .then(function (response) {
-                message.success("Klient muvaffaqiyatli qo'shildi");
+                message.success("Ish vaqti muvaffaqiyatli qo'shildi");
                 getOutcomeSocks(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Klientni qo'shishda muammo bo'ldi");
+                message.error("Ish vaqtini qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -117,19 +116,17 @@ const WorkingTimes = () => {
     const onEdit = (values, initial) => {
         setLoading(true);
         instance
-            .put(`api/turnstile/worker/update/${initial.id}`, {
+            .put(`api/turnstile/workingTimes/update/${initial.id}`, {
                 ...values,
-                workerUuid: initial.id,
-                delete: false,
             })
             .then((res) => {
-                message.success("Klient muvaffaqiyatli taxrirlandi");
+                message.success("Ish vaqti muvaffaqiyatli taxrirlandi");
                 getOutcomeSocks(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Klientni taxrirlashda muammo bo'ldi");
+                message.error("Ish vaqtini taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -137,32 +134,11 @@ const WorkingTimes = () => {
         setLoading(true);
     };
 
-    // const handleDelete = (arr) => {
-    //     setLoading(true);
-    //     arr.map((item) => {
-    //         instance
-    //             .delete(`api/turnstile/worker/delete/${item}`)
-    //             .then((data) => {
-    //                 getOutcomeSocks(current - 1, pageSize);
-    //                 message.success("Klient muvaffaqiyatli o'chirildi");
-    //             })
-    //             .catch((error) => {
-    //                 console.error(error);
-    //                 if (error.response?.status === 500)
-    //                     navigate("/server-error");
-    //                 message.error("Klientni o'chirishda muammo bo'ldi");
-    //             })
-    //             .finally(() => setLoading(false));
-    //         return null;
-    //     });
-    // };
-
     return (
         <>
             <CustomTable
                 onEdit={onEdit}
                 onCreate={onCreate}
-                // onDelete={handleDelete}
                 getData={getOutcomeSocks}
                 columns={columns}
                 tableData={outcomeSocks}

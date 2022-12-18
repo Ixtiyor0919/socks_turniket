@@ -2,20 +2,12 @@ import { Drawer, Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import {
     DashboardOutlined,
-    UserOutlined,
-    LogoutOutlined,
-    CloudUploadOutlined,
-    CloudDownloadOutlined,
-    DollarCircleOutlined,
-    AppstoreAddOutlined,
     TeamOutlined,
-    AppstoreOutlined,
-    CloudSyncOutlined,
-    CloudServerOutlined,
     ClockCircleOutlined,
+    ScheduleOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
-import turnstileLogo from "./turnstileLogo.jpg";
+import socks2 from "./socks2.png";
 
 function DrapdownMenu({ onClose, isVisible }) {
     const { token } = useToken();
@@ -38,17 +30,27 @@ function DrapdownMenu({ onClose, isVisible }) {
             onClose={onClose}
             visible={isVisible}
         >
-              <div className="logo" style={{ marginRight: "5%" }}>
-                    <Link to="/" style={{ marginTop: "3px", display: "block" }}>
-                        <img
-                            src={turnstileLogo}
-                            alt="img-logo"
-                            width={70}
-                            height={40}
-                        />
-                        {/* Socks Turnstile */}
-                    </Link>
-                </div>
+            <div
+                className="logo"
+                style={{
+                    marginRight: "5%",
+                    background: "rgb(0 21 41)",
+                    padding: "15px 0 10px 15px",
+                }}
+            >
+                <Link to="/" style={{ display: "flex", alignItems: "center" }}>
+                    <img
+                        src={socks2}
+                        alt="img-logo"
+                        width={70}
+                        height={40}
+                        style={{ marginRight: "10%" }}
+                    />
+                    <h2 style={{ color: "#fff", margin: 0 }}>
+                        Socks Turnstile
+                    </h2>
+                </Link>
+            </div>
             <Menu
                 style={{
                     height: "120%",
@@ -71,55 +73,53 @@ function DrapdownMenu({ onClose, isVisible }) {
                     },
                     {
                         label: "Ishchilar",
-                        key: "/workers",
+                        key: "/Ishchilar",
                         icon: (
-                            <Link to="/workers">
-                                <TeamOutlined
+                            <Link to="/Ishchilar">
+                                <TeamOutlined style={{ fontSize: "18px" }} />
+                            </Link>
+                        ),
+                    },
+                    {
+                        label: "Ish vaqtilari",
+                        key: "/Ish-vaqtlari",
+                        icon: (
+                            <Link to="/Ish-vaqtlari">
+                                <ClockCircleOutlined
                                     style={{ fontSize: "18px" }}
                                 />
                             </Link>
                         ),
                     },
                     {
-                        label: "Ish vaqti",
-                        key: "/worker-times",
+                        label: "Oylar",
+                        key: "/Oylar",
                         icon: (
-                            <Link to="/worker-times">
-                                <ClockCircleOutlined 
+                            <Link to="/Oylar">
+                                <ScheduleOutlined
                                     style={{ fontSize: "18px" }}
                                 />
                             </Link>
                         ),
                     },
-                    {
-                        label: "Ish haqi",
-                        key: "/salary",
-                        icon: (
-                            <Link to="/salary">
-                                <DollarCircleOutlined 
-                                    style={{ fontSize: "18px" }}
-                                />
-                            </Link>
-                        ),
-                    },
-                    {
-                        label: "Profil",
-                        key: "/profil",
-                        icon: (
-                            <Link to="/profil">
-                                <UserOutlined style={{ fontSize: "18px" }} />
-                            </Link>
-                        ),
-                    },
-                    {
-                        label: "Chiqish",
-                        key: "/logout",
-                        icon: (
-                            <div type="link" onClick={(e) => handleLogOut(e)}>
-                                <LogoutOutlined style={{ fontSize: "18px" }} />
-                            </div>
-                        ),
-                    },
+                    // {
+                    //     label: "Profil",
+                    //     key: "/profil",
+                    //     icon: (
+                    //         <Link to="/profil">
+                    //             <UserOutlined style={{ fontSize: "18px" }} />
+                    //         </Link>
+                    //     ),
+                    // },
+                    // {
+                    //     label: "Chiqish",
+                    //     key: "/logout",
+                    //     icon: (
+                    //         <div type="link" onClick={(e) => handleLogOut(e)}>
+                    //             <LogoutOutlined style={{ fontSize: "18px" }} />
+                    //         </div>
+                    //     ),
+                    // },
                 ]}
             />
         </Drawer>

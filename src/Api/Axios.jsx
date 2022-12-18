@@ -5,7 +5,7 @@ const token1 = JSON.parse(sessionStorage.getItem("socks-turnstile-token"));
 const token2 = JSON.parse(localStorage.getItem("socks-turnstile-token"));
 
 const instance = axios.create({
-    baseURL: "https://app-turnstile.herokuapp.com/",
+    baseURL: "https://project1-java.herokuapp.com/",
     headers: {
         "Content-Type": "application/json",
         "Accept-Language": "uz",
@@ -55,6 +55,7 @@ const AxiosInterceptor = ({ children }) => {
     }, []);
     return children;
 };
+
 
 export default instance;
 export { AxiosInterceptor };

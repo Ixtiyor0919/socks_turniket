@@ -3,17 +3,17 @@ import React, { useState } from "react";
 import {
     DashboardOutlined,
     MenuOutlined,
-    UserOutlined,
-    LogoutOutlined,
+    // UserOutlined,
+    // LogoutOutlined,
     TeamOutlined,
     DollarCircleOutlined,
     ClockCircleOutlined,
+    ScheduleOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import useToken from "../../Hook/UseToken";
 import DrapdownMenu from "../DrapdownMenu/DrapdownMenu";
-import turnstileLogo from "./turnstileLogo.jpg";
-import socksLogo from "./socksLogo.png";
+import socks2 from "./socks2.png";
 
 const { Header } = Layout;
 
@@ -40,37 +40,37 @@ function Navbar() {
         setIsVisible(false);
     };
 
-    const menu = (
-        <Menu
-            items={[
-                {
-                    key: "/profil",
-                    icon: <UserOutlined />,
-                    label: (
-                        <Link
-                            to="/profil"
-                            style={{ width: "100px", display: "inline-block" }}
-                        >
-                            Profil
-                        </Link>
-                    ),
-                },
-                {
-                    key: "3",
-                    danger: true,
-                    icon: <LogoutOutlined />,
-                    label: (
-                        <div
-                            onClick={(e) => handleLogOut(e)}
-                            style={{ width: "100px" }}
-                        >
-                            Chiqish
-                        </div>
-                    ),
-                },
-            ]}
-        />
-    );
+    // const menu = (
+    //     <Menu
+    //         items={[
+    //             {
+    //                 key: "/profil",
+    //                 icon: <UserOutlined />,
+    //                 label: (
+    //                     <Link
+    //                         to="/profil"
+    //                         style={{ width: "100px", display: "inline-block" }}
+    //                     >
+    //                         Profil
+    //                     </Link>
+    //                 ),
+    //             },
+    //             {
+    //                 key: "3",
+    //                 danger: true,
+    //                 icon: <LogoutOutlined />,
+    //                 label: (
+    //                     <div
+    //                         onClick={(e) => handleLogOut(e)}
+    //                         style={{ width: "100px" }}
+    //                     >
+    //                         Chiqish
+    //                     </div>
+    //                 ),
+    //             },
+    //         ]}
+    //     />
+    // );
 
     return (
         <Header
@@ -95,7 +95,7 @@ function Navbar() {
                 <div className="logo" style={{ marginRight: "5%" }}>
                     <Link to="/" style={{ marginTop: "3px", display: "block" }}>
                         <img
-                            src={socksLogo}
+                            src={socks2}
                             alt="img-logo"
                             width={70}
                             height={40}
@@ -122,9 +122,9 @@ function Navbar() {
                         },
                         {
                             label: "Ishchilar",
-                            key: "/workers",
+                            key: "/Ishchilar",
                             icon: (
-                                <Link to="/workers">
+                                <Link to="/Ishchilar">
                                     <TeamOutlined
                                         style={{ fontSize: "18px" }}
                                     />
@@ -133,9 +133,9 @@ function Navbar() {
                         },
                         {
                             label: "Ish vaqti",
-                            key: "/working-times",
+                            key: "/Ish-vaqtlari",
                             icon: (
-                                <Link to="/working-times">
+                                <Link to="/Ish-vaqtlari">
                                     <ClockCircleOutlined 
                                         style={{ fontSize: "18px" }}
                                     />
@@ -144,10 +144,21 @@ function Navbar() {
                         },
                         {
                             label: "Ish haqi",
-                            key: "/salary",
+                            key: "/Ish-haqilari",
                             icon: (
-                                <Link to="/salary">
+                                <Link to="/Ish-haqilari">
                                     <DollarCircleOutlined 
+                                        style={{ fontSize: "18px" }}
+                                    />
+                                </Link>
+                            ),
+                        },
+                        {
+                            label: "Oylar",
+                            key: "/Oylar",
+                            icon: (
+                                <Link to="/Oylar">
+                                    <ScheduleOutlined 
                                         style={{ fontSize: "18px" }}
                                     />
                                 </Link>
@@ -163,7 +174,7 @@ function Navbar() {
                         alignItems: "center",
                     }}
                 >
-                    <Dropdown overlay={menu} placement="bottomRight" arrow>
+                    {/* <Dropdown overlay={menu} placement="bottomRight" arrow>
                         <Avatar
                             size="middle"
                             style={{
@@ -173,7 +184,7 @@ function Navbar() {
                         >
                             {"Admin".charAt(0)}
                         </Avatar>
-                    </Dropdown>
+                    </Dropdown> */}
                 </span>
                 <div className="burger-menu">
                     <span
