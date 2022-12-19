@@ -7,7 +7,7 @@ import {
     ScheduleOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
-import socks2 from "./socks2.png";
+import turniketLogo from "./turniketLogo.jpeg";
 
 function DrapdownMenu({ onClose, isVisible }) {
     const { token } = useToken();
@@ -40,11 +40,11 @@ function DrapdownMenu({ onClose, isVisible }) {
             >
                 <Link to="/" style={{ display: "flex", alignItems: "center" }}>
                     <img
-                        src={socks2}
+                        src={turniketLogo}
                         alt="img-logo"
                         width={70}
                         height={40}
-                        style={{ marginRight: "10%" }}
+                        style={{ marginRight: "10%", borderRadius: '5px' }}
                     />
                     <h2 style={{ color: "#fff", margin: 0 }}>
                         Socks Turnstile
