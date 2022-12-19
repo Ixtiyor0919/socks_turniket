@@ -13,7 +13,7 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import useToken from "../../Hook/UseToken";
 import DrapdownMenu from "../DrapdownMenu/DrapdownMenu";
-import socks2 from "./socks2.png";
+import turniketLogo from "./turniketLogo.jpeg";
 
 const { Header } = Layout;
 
@@ -40,38 +40,6 @@ function Navbar() {
         setIsVisible(false);
     };
 
-    // const menu = (
-    //     <Menu
-    //         items={[
-    //             {
-    //                 key: "/profil",
-    //                 icon: <UserOutlined />,
-    //                 label: (
-    //                     <Link
-    //                         to="/profil"
-    //                         style={{ width: "100px", display: "inline-block" }}
-    //                     >
-    //                         Profil
-    //                     </Link>
-    //                 ),
-    //             },
-    //             {
-    //                 key: "3",
-    //                 danger: true,
-    //                 icon: <LogoutOutlined />,
-    //                 label: (
-    //                     <div
-    //                         onClick={(e) => handleLogOut(e)}
-    //                         style={{ width: "100px" }}
-    //                     >
-    //                         Chiqish
-    //                     </div>
-    //                 ),
-    //             },
-    //         ]}
-    //     />
-    // );
-
     return (
         <Header
             style={{
@@ -93,12 +61,13 @@ function Navbar() {
                 }}
             >
                 <div className="logo" style={{ marginRight: "5%" }}>
-                    <Link to="/" style={{ marginTop: "3px", display: "block" }}>
+                    <Link to="/" style={{ display: "block" }}>
                         <img
-                            src={socks2}
+                            src={turniketLogo}
                             alt="img-logo"
-                            width={70}
-                            height={40}
+                            width={100}
+                            height={64}
+                            style={{background: 'transparent'}}
                         />
                     </Link>
                 </div>
