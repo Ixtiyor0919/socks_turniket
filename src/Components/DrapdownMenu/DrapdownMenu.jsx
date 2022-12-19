@@ -5,6 +5,7 @@ import {
     TeamOutlined,
     ClockCircleOutlined,
     ScheduleOutlined,
+    DollarCircleOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
 import turniketLogo from "./turniketLogo.jpeg";
@@ -81,11 +82,22 @@ function DrapdownMenu({ onClose, isVisible }) {
                         ),
                     },
                     {
-                        label: "Ish vaqtilari",
+                        label: "Ish vaqti",
                         key: "/Ish-vaqtlari",
                         icon: (
                             <Link to="/Ish-vaqtlari">
                                 <ClockCircleOutlined
+                                    style={{ fontSize: "18px" }}
+                                />
+                            </Link>
+                        ),
+                    },
+                    {
+                        label: "Ish haqi",
+                        key: "/Ish-haqilari",
+                        icon: (
+                            <Link to="/Ish-haqilari">
+                                <DollarCircleOutlined 
                                     style={{ fontSize: "18px" }}
                                 />
                             </Link>
