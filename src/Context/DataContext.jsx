@@ -313,6 +313,9 @@ export const DataProvider = ({ children }) => {
 
     const value = {
         formData,
+        getPositionData,
+        getWorkerData,
+        getMonthsData,
         dataTurnstileData,
         workerData,
         monthData,
