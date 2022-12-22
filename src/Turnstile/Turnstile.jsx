@@ -17,7 +17,7 @@ const Turnstile = () => {
         instance
             .get(`api/turnstile/position/page?page=${current}&size=${pageSize}`)
             .then((data) => {
-                setOutcomeSocks(data.data?.data?.materials);
+                setOutcomeSocks(data.data?.data?.positions);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
@@ -30,7 +30,7 @@ const Turnstile = () => {
 
     const columns = [
         {
-            title: "Ishchining ismi",
+            title: "Lavozi nomi",
             dataIndex: "name",
             key: "name",
             width: "50%",
