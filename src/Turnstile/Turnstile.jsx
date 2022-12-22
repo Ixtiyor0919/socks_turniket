@@ -3,6 +3,7 @@ import instance from "../Api/Axios";
 import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
+import { useData } from "../Hook/UseData";
 
 const Turnstile = () => {
     const [outcomeSocks, setOutcomeSocks] = useState([]);
@@ -10,6 +11,7 @@ const Turnstile = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
+    const { getPositionData } = useData();
     const navigate = useNavigate();
 
     const getOutcomeSocks = (current, pageSize) => {
@@ -17,6 +19,7 @@ const Turnstile = () => {
         instance
             .get(`api/turnstile/position/page?page=${current}&size=${pageSize}`)
             .then((data) => {
+                getPositionData();
                 setOutcomeSocks(data.data?.data?.positions);
                 setTotalItems(data.data?.data?.totalItems);
             })

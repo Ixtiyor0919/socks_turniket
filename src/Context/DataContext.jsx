@@ -316,8 +316,8 @@ export const DataProvider = ({ children }) => {
         getPositionData,
         getWorkerData,
         getMonthsData,
-        dataTurnstileData,
         workerData,
+        dataTurnstileData,
         monthData,
     };
 

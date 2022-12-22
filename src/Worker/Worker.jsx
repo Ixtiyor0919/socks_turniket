@@ -11,7 +11,7 @@ const Worker = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { dataTurnstileData } = useData();
+    const { dataTurnstileData, getWorkerData } = useData();
     const navigate = useNavigate();
 
     const getOutcomeSocks = (current, pageSize) => {
@@ -19,6 +19,7 @@ const Worker = () => {
         instance
             .get(`api/turnstile/worker/getAllPageable?page=${current}&size=${pageSize}`)
             .then((data) => {
+                getWorkerData();
                 setOutcomeSocks(data.data?.data?.branches);
                 setTotalItems(data.data?.data?.totalItems);
             })

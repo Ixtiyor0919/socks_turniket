@@ -10,8 +10,8 @@ const Salary = () => {
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const navigate = useNavigate();
     const { workerData, monthData } = useData();
+    const navigate = useNavigate();
 
     const getResponseFunc = () => {
         setLoading(true);
