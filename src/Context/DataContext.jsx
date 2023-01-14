@@ -1,4 +1,7 @@
-import { InputNumber, Input } from "antd";
+import { TextField } from "@mui/material";
+import { InputNumber, Input, DatePicker } from "antd";
+import { format } from "date-fns";
+import moment from "moment";
 import { createContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import instance from "../Api/Axios";
@@ -7,60 +10,23 @@ import CustomSelect from "../Module/Select/Select";
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
-    const [dataTurnstileData, setTurnstileData] = useState([]);
     const [workerData, setWorkerData] = useState([]);
-    const [monthData, setMonthsData] = useState([]);
     let location = useLocation();
-
-    const turnstileData = [
-        {
-            name: "name",
-            label: "Ismi",
-            input: <Input style={{ width: "100%" }} />,
-        },
-        {
-            name: "hourlyWages",
-            label: "Soatlik ish haqi",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
-    ];
-
-    const editTurnstileData = [
-        {
-            name: "name",
-            label: "Ismi",
-            input: <Input style={{ width: "100%" }} />,
-        },
-        {
-            name: "hourlyWages",
-            label: "Soatlik ish haqi",
-            input: <InputNumber style={{ width: "100%" }} />,
-        },
-    ];
-
+    const dateFormat = "YYYY/MM/DD";
     const formWorkerData = [
         {
             name: "fio",
-            label: "Ismi",
+            label: "Xodim",
             input: <Input style={{ width: "100%" }} />,
         },
         {
-            name: "positionId",
-            label: "Lavozimlar",
-            input: (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Lavozim tanlang"}
-                    selectData={dataTurnstileData?.map((item) => ({
-                        ...item,
-                        name: item.name,
-                    }))}
-                />
-            ),
+            name: "phoneNumber",
+            label: "Xodimning nomeri",
+            input: <InputNumber style={{ width: "100%" }} />,
         },
         {
-            name: "phoneNumber",
-            label: "Ishchining nomeri",
+            name: "hourlyWages",
+            label: "Soatlik ish haqi",
             input: <InputNumber style={{ width: "100%" }} />,
         },
     ];
@@ -68,26 +34,16 @@ export const DataProvider = ({ children }) => {
     const editWorkerData = [
         {
             name: "fio",
-            label: "Ismi",
+            label: "Xodim",
             input: <Input style={{ width: "100%" }} />,
         },
         {
-            name: "positionId",
-            label: "Lavozimlar",
-            inputSelect: (defaultId = null) => (
-                <CustomSelect
-                    backValue={"id"}
-                    placeholder={"Lavozim tanlang"}
-                    selectData={dataTurnstileData?.map((item) => ({
-                        ...item,
-                        name: item.name,
-                    }))}
-                    DValue={defaultId}
-                />
-            ),
+            name: "phoneNumber",
+            label: "Xodimning nomeri",
+            input: <InputNumber style={{ width: "100%" }} />,
         },
         {
-            name: "phoneNumber",
+            name: "hourlyWages",
             label: "Soatlik ish haqi",
             input: <Input style={{ width: "100%" }} />,
         },
@@ -96,28 +52,53 @@ export const DataProvider = ({ children }) => {
     const workingTimesFormData = [
         {
             name: "workerId",
-            label: "Ishchilar",
+            label: "Xodim",
             input: (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Ishchini tanlang"}
+                    placeholder={"Xodimni tanlang"}
                     selectData={workerData?.map((item) => ({
                         ...item,
                         name: item.fio,
                     }))}
                 />
             ),
+        },
+        {
+            name: "today",
+            label: "Sanasi",
+            input: (
+                // <TextField
+                //     type="date"
+                //     format={dateFormat}
+                //     value={moment().format()}
+                //     InputLabelProps={{
+                //     shrink: true,
+                //         }}
+                //     sx={{
+                //         width:'100%',
+                //         '& legend': { display: 'none' },
+                //         '& fieldset': { top: 0 },
+                //     }}
+                // />
+                <DatePicker style={{ width: "100%" }} value={moment().format()}  />
+            )
+        },
+        {
+            name: "hours",
+            label: "Soati",
+            input: <Input style={{ width: "100%" }} />,
         },
     ];
 
     const editWorkingTimesFormData = [
         {
             name: "workerId",
-            label: "Ishchilar",
+            label: "Xodim",
             inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Ishchini tanlang"}
+                    placeholder={"Xodimni tanlang"}
                     selectData={workerData?.map((item) => ({
                         ...item,
                         name: item.fio,
@@ -127,60 +108,116 @@ export const DataProvider = ({ children }) => {
             ),
         },
         {
-            name: "startTime",
-            label: "startTime",
-            input: <Input style={{ width: "100%" }} />,
+            name: "today",
+            label: "Kuni",
+            inputSelect: (defaultId = null) => (
+                <TextField
+                    format={dateFormat}
+                    type="date"
+                    defaultValue={moment(defaultId).format()} 
+                    InputLabelProps={{
+                    shrink: true,
+                    }}
+                    sx={{
+                        width:'100%',
+                        '& legend': { display: 'none' },
+                        '& fieldset': { top: 0 },
+                    }}
+                    />
+                //     <DatePicker
+                //         style={{ width: "100%" }}
+                //         defaultValue={moment(defaultId).format()}
+                //         format={dateFormat}
+                // />
+            )
         },
         {
-            name: "endTime",
-            label: "endTime",
+
+            name: "hours",
+            label: "Soati",
             input: <Input style={{ width: "100%" }} />,
         },
     ];
 
-
     const salaryFormData = [
         {
             name: "workerId",
-            label: "Ishchilar",
+            label: "Xodim",
             input: (
                 <CustomSelect selectData={workerData?.map((item) => ({
                         ...item,
                         name: item.fio,
                     }))}
                     backValue={"id"}
-                    placeholder={"Ishchini tanlang"}
+                    placeholder={"Xodimni tanlang"}
                 />
             ),
+        },
+        {
+            name: "month",
+            label: "Sana",
+            inputSelect: (defaultId = null) => {
+                return(
+                    <TextField
+                        type="date"
+                        format={dateFormat}
+                        defaultValue={moment(defaultId).format()} 
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        sx={{
+                            width:'100%',
+                            '& legend': { display: 'none' },
+                            '& fieldset': { top: 0 },
+                          }}
+                    />
+                )
+            }
         },
         {
             name: "salary",
             label: "Ish haqi",
             input: <Input style={{ width: "100%" }} />,
-        },
+        }
+    ];
+
+    const prepaymentFormData = [
         {
-            name: "monthId",
-            label: "Oylar",
+            name: "workerId",
+            label: "Xodim",
             input: (
-                <CustomSelect selectData={monthData?.map((item) => ({
-                        ...item,
-                        name: item.name,
-                    }))}
+                <CustomSelect
                     backValue={"id"}
-                    placeholder={"Oyni tanlang"}
+                    placeholder={"Xodimni tanlang"}
+                    selectData={workerData?.map((item) => ({
+                        ...item,
+                        name: item.fio,
+                    }))}
                 />
             ),
         },
+        {
+            name: "date",
+            label: "Sana",
+            input: (
+                <DatePicker style={{ width: "100%" }} value={moment()}  />
+            )
+        },
+        {
+            name: "summa",
+            label: "Avans summasi",
+            input: <Input style={{ width: "100%" }} />,
+        },
     ];
 
-    const editSalaryFormData = [
+    const editPrepaymentFormData = [
         {
             name: "workerId",
-            label: "Ishchilar",
+            label: "Xodim",
             inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Ishchini tanlang"}
+                    placeholder={"Xodimni tanlang"}
                     selectData={workerData?.map((item) => ({
                         ...item,
                         name: item.fio,
@@ -190,43 +227,116 @@ export const DataProvider = ({ children }) => {
             ),
         },
         {
-            name: "salary",
-            label: "Ish haqi",
+            name: "date",
+            label: "Sana",
+            inputSelect: (defaultId = null) => {
+                return(
+                    <TextField
+                        type="date"
+                        format={dateFormat}
+                        defaultValue={moment(defaultId).format()} 
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        sx={{
+                            width:'100%',
+                            '& legend': { display: 'none' },
+                            '& fieldset': { top: 0 },
+                          }}
+                    />
+                )
+            }
+        },
+        {
+            name: "summa",
+            label: "Avans summasi",
+            input: <Input style={{ width: "100%" }} />,
+        },
+    ];
+
+    const expensesFormData = [
+        {
+            name: "workerId",
+            label: "Xodim",
+            input: (
+                <CustomSelect
+                    backValue={"id"}
+                    placeholder={"Xodimni tanlang"}
+                    selectData={workerData?.map((item) => ({
+                        ...item,
+                        name: item.fio,
+                    }))}
+                />
+            ),
+        },
+        {
+            name: "expenseName",
+            label: "Xarajat nomi",
             input: <Input style={{ width: "100%" }} />,
         },
         {
-            name: "monthId",
-            label: "Oylar",
+            name: "date",
+            label: "Sana",
+            input: (
+                <DatePicker style={{ width: "100%" }} value={moment()}  />
+            )
+        },
+        {
+            name: "summa",
+            label: "Xarajat summasi",
+            input: <Input style={{ width: "100%" }} />,
+        },
+    ];
+
+    const editExpensesFormData = [
+        {
+            name: "workerId",
+            label: "Xodim",
             inputSelect: (defaultId = null) => (
                 <CustomSelect
                     backValue={"id"}
-                    placeholder={"Oyni tanlang"}
-                    selectData={monthData?.map((item) => ({
+                    placeholder={"Xodimni tanlang"}
+                    selectData={workerData?.map((item) => ({
                         ...item,
-                        name: item.name,
-                    }))}
+                        name: item.fio,
+                    }))
+                }
                     DValue={defaultId}
                 />
             ),
         },
+        {
+            name: "expenseName",
+            label: "Xarajat nomi",
+            input: <Input style={{ width: "100%" }} />,
+        },
+        {
+            name: "date",
+            label: "Sana",
+            inputSelect: (defaultId = null) => {
+                return(
+                    <TextField
+                        type="date"
+                        format={dateFormat}
+                        defaultValue={moment(defaultId).format()} 
+                        InputLabelProps={{
+                        shrink: true,
+                        }}
+                        sx={{
+                            width:'100%',
+                            '& legend': { display: 'none' },
+                            '& fieldset': { top: 0 },
+                          }}
+                    />
+                )
+            }
+        },
+        {
+            name: "summa",
+            label: "Xarajat summasi",
+            input: <Input style={{ width: "100%" }} />,
+        },
     ];
-    const getPositionData = () => {
-        instance
-            .get("api/turnstile/position/list")
-            .then((data) => {
-                setTurnstileData(data.data.data);
-            })
-            .catch((err) => console.error(err));
-    };
-
-    const getMonthsData = () => {
-        instance
-            .get("api/turnstile/month/list")
-            .then((data) => {
-                setMonthsData(data.data.data);
-            })
-            .catch((err) => console.error(err));
-    };
 
     const getWorkerData = () => {
         instance
@@ -238,30 +348,13 @@ export const DataProvider = ({ children }) => {
     };
 
     useEffect(() => {
-        getPositionData();
         getWorkerData();
-        getMonthsData();
     }, []);
 
     let formData = {};
 
     switch (location.pathname) {
         case "/": {
-            formData = {
-                formData: turnstileData,
-                editFormData: editTurnstileData,
-                branchData: false,
-                timeFilterInfo: false,
-                deleteInfo: true,
-                createInfo: true,
-                editInfo: true,
-                timelyInfo: false,
-                editModalTitle: "O'zgartirish",
-                modalTitle: "Yangi qo'shish",
-            };
-            break;
-        }
-        case "/Ishchilar": {
             formData = {
                 formData: formWorkerData,
                 editFormData: editWorkerData,
@@ -282,6 +375,9 @@ export const DataProvider = ({ children }) => {
                 editFormData: editWorkingTimesFormData,
                 branchData: false,
                 timeFilterInfo: false,
+                workerFilterInfo: true,
+                selectFilter: true,
+                workerFilter: true,
                 deleteInfo: false,
                 createInfo: true,
                 editInfo: true,
@@ -294,10 +390,41 @@ export const DataProvider = ({ children }) => {
         case "/Ish-haqilari": {
             formData = {
                 formData: salaryFormData,
-                editFormData: editSalaryFormData,
+                editFormData: salaryFormData,
                 branchData: false,
                 timeFilterInfo: false,
                 deleteInfo: false,
+                createInfo: false,
+                editInfo: true,
+                timelyInfo: false,
+                monthFilter: true,
+                editModalTitle: "O'zgartirish",
+                modalTitle: "Yangi qo'shish",
+            };
+            break;
+        }
+        case "/Avans": {
+            formData = {
+                formData: prepaymentFormData,
+                editFormData: editPrepaymentFormData,
+                branchData: false,
+                timeFilterInfo: false,
+                deleteInfo: true,
+                createInfo: true,
+                editInfo: true,
+                timelyInfo: false,
+                editModalTitle: "O'zgartirish",
+                modalTitle: "Yangi qo'shish",
+            };
+            break;
+        }
+        case "/Ishchilar-xarajatlari": {
+            formData = {
+                formData: expensesFormData,
+                editFormData: editExpensesFormData,
+                branchData: false,
+                timeFilterInfo: false,
+                deleteInfo: true,
                 createInfo: true,
                 editInfo: true,
                 timelyInfo: false,
@@ -313,12 +440,8 @@ export const DataProvider = ({ children }) => {
 
     const value = {
         formData,
-        getPositionData,
         getWorkerData,
-        getMonthsData,
-        workerData,
-        dataTurnstileData,
-        monthData,
+        workerData
     };
 
     return (

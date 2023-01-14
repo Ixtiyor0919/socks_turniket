@@ -12,11 +12,12 @@ const WorkingTimes = () => {
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const navigate = useNavigate();
     const { workerData } = useData();
+    const navigate = useNavigate();
 
     const getOutcomeSocks = (current, pageSize) => {
         setLoading(true);
+        console.log('current:', current,  'pageSize:', pageSize);
         instance
             .get(
                 `api/turnstile/workingTimes/getAllPageable?page=${current}&size=${pageSize}`
@@ -25,8 +26,7 @@ const WorkingTimes = () => {
                 const apiData = data.data?.data?.allWorkers.map((item) => {
                     return {
                         ...item,
-                        startTime: moment(item.startTime).format("DD-MM-YYYY"),
-                        endTime: moment(item.endTime).format("DD-MM-YYYY"),
+                        today: moment(item.today).format("YYYY-MM-DD"),
                     };
                 });
                 setOutcomeSocks(apiData);
@@ -40,9 +40,70 @@ const WorkingTimes = () => {
             .finally(() => setLoading(false));
     };
 
+    const dateFilter = (date, current, pageSize) => {
+        setLoading(true);
+        instance
+            .get(
+                `api/turnstile/workingTimes/workers?startDate=${moment(
+                    date[0]
+                ).format("YYYY-MM-DD HH:MM:SS")}&endDate=${moment(
+                    date[1]
+                ).format("YYYY-MM-DD HH:MM:SS")}${current}&size=${pageSize}`
+            )
+            .then((data) => {
+                const responseData = data.data?.data?.workingTimesPage.map(
+                    (item) => {
+                        return {
+                            ...item,
+                            today: moment(item?.today).format("YYYY-MM-DD"),
+                        };
+                    }
+                );
+                console.log(responseData);
+                setOutcomeSocks(responseData);
+                setTotalItems(data.data?.data?.totalItems);
+            })
+            .catch((err) => {
+                console.error(err);
+                if (err.response?.status === 500) navigate("/server-error");
+                message.error("Kelgan quruq mevalarni yuklashda muammo bo'ldi");
+            })
+            .finally(() => setLoading(false));
+    };
+
+    const getDataFilter = (value, date, current, pageSize) => {
+        setLoading(true);
+        instance
+            .get(
+                `api/turnstile/workingTimes/byWorker?workerId=${value}&startDate=${moment(
+                    date[0]
+                ).format("YYYY-MM-DD HH:MM:SS")}&endDate=${moment(
+                    date[1]
+                ).format("YYYY-MM-DD HH:MM:SS")}&page=${current}&size=${pageSize}`
+            )
+            .then((data) => {
+                const responseData = data.data?.data?.workingTimesPage.map(
+                    (item) => {
+                        return {
+                            ...item,
+                            today: moment(item?.today).format("YYYY-MM-DD"),
+                        };
+                    }
+                );
+                    setOutcomeSocks(responseData);
+                    setTotalItems(data.data?.data?.totalItems);
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response?.status === 500) navigate("/server-error");
+                message.error("Sana va ishchi bo'yicha yuklashda muammo bo'ldi");
+            })
+            .finally(() => setLoading(false));
+    };
+
     const columns = [
         {
-            title: "Ishchining ismi",
+            title: "Xodim",
             dataIndex: "workerId",
             key: "workerId",
             width: "33%",
@@ -62,32 +123,32 @@ const WorkingTimes = () => {
             },
         },
         {
-            title: "Boshlanish vaqti",
-            dataIndex: "startTime",
-            key: "startTime",
+            title: "Sanasi",
+            dataIndex: "today",
+            key: "today",
             width: "33%",
             search: false,
             sorter: (a, b) => {
-                if (a.startTime < b.startTime) {
+                if (a.today < b.today) {
                     return -1;
                 }
-                if (a.startTime > b.startTime) {
+                if (a.today > b.today) {
                     return 1;
                 }
                 return 0;
             },
         },
         {
-            title: "Tugash vaqti",
-            dataIndex: "endTime",
-            key: "endTime",
+            title: "Soat",
+            dataIndex: "hours",
+            key: "hours",
             width: "33%",
             search: false,
             sorter: (a, b) => {
-                if (a.endTime < b.endTime) {
+                if (a.hours < b.hours) {
                     return -1;
                 }
-                if (a.endTime > b.endTime) {
+                if (a.hours > b.hours) {
                     return 1;
                 }
                 return 0;
@@ -97,8 +158,12 @@ const WorkingTimes = () => {
 
     const onCreate = (values) => {
         setLoading(true);
+        const value = {
+            ...values,
+            today: moment(values.today, "YYYY-MM-DD").toISOString(),
+        };
         instance
-            .post("api/turnstile/workingTimes/add", { ...values })
+            .post("api/turnstile/workingTimes/add", { ...value })
             .then(function (response) {
                 message.success("Ish vaqti muvaffaqiyatli qo'shildi");
                 getOutcomeSocks(current - 1, pageSize);
@@ -134,6 +199,11 @@ const WorkingTimes = () => {
         setLoading(true);
     };
 
+    const filterSelect = [
+        { label: "Sana bo'yicha", value: "date" },
+        { label: "Ishchi va sana bo'yicha", value: "workerDate" }
+    ];
+
     return (
         <>
             <CustomTable
@@ -142,6 +212,9 @@ const WorkingTimes = () => {
                 getData={getOutcomeSocks}
                 columns={columns}
                 tableData={outcomeSocks}
+                dateFilter={dateFilter}
+                getDataFilter={getDataFilter}
+                filterSelect={filterSelect}
                 current={current}
                 pageSize={pageSize}
                 totalItems={totalItems}

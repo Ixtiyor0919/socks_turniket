@@ -4,61 +4,88 @@ import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
+import moment from "moment";
 
-const Turnstile = () => {
-    const [outcomeSocks, setOutcomeSocks] = useState([]);
+const Prepayment = () => {
+    const [responseData, setResponseData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
-    const { getPositionData } = useData();
+    const { workerData } = useData();
     const navigate = useNavigate();
 
-    const getOutcomeSocks = (current, pageSize) => {
+    const getResponseFunc = (current, pageSize) => {
         setLoading(true);
+        console.log('current:', current,  'pageSize:', pageSize);
         instance
-            .get(`api/turnstile/position/page?page=${current}&size=${pageSize}`)
+            .get(`api/turnstile/prepayment/page?page=${current}&size=${pageSize}`)
             .then((data) => {
-                getPositionData();
-                setOutcomeSocks(data.data?.data?.positions);
+                const apiData = data.data?.data?.prepayments.map((item) => {
+                    return {
+                        ...item,
+                        date: moment(item.date).format("YYYY-MM-DD"),
+                    };
+                });
+                setResponseData(apiData);
                 setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Lavozimlarni yuklashda muammo bo'ldi");
+                message.error("Avanslarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
 
     const columns = [
         {
-            title: "Lavozi nomi",
-            dataIndex: "name",
-            key: "name",
-            width: "50%",
+            title: "Xodim",
+            dataIndex: "workerId",
+            key: "workerId",
+            width: "33%",
             search: false,
+            render: (record) => {
+                const data = workerData?.filter((item) => item.id === record);
+                return data[0]?.fio;
+            },
             sorter: (a, b) => {
-                if (a.name < b.name) {
+                if (a.workerId < b.workerId) {
                     return -1;
                 }
-                if (a.name > b.name) {
+                if (a.workerId > b.workerId) {
                     return 1;
                 }
                 return 0;
             },
         },
         {
-            title: "Soatlik ish haqi",
-            dataIndex: "hourlyWages",
-            key: "hourlyWages",
-            width: "50%",
+            title: "Sana",
+            dataIndex: "date",
+            key: "date",
+            width: "33%",
             search: false,
             sorter: (a, b) => {
-                if (a.hourlyWages < b.hourlyWages) {
+                if (a.date < b.date) {
                     return -1;
                 }
-                if (a.hourlyWages > b.hourlyWages) {
+                if (a.date > b.date) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Avans summasi",
+            dataIndex: "summa",
+            key: "summa",
+            width: "33%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.summa < b.summa) {
+                    return -1;
+                }
+                if (a.summa > b.summa) {
                     return 1;
                 }
                 return 0;
@@ -68,16 +95,20 @@ const Turnstile = () => {
 
     const onCreate = (values) => {
         setLoading(true);
+        const value = {
+            ...values,
+            date: moment(values.date, "YYYY-MM-DD").toISOString(),
+        }
         instance
-            .post("api/turnstile/position", { ...values })
+            .post("api/turnstile/prepayment/add", { ...value })
             .then(function (response) {
-                message.success("Lavozim muvaffaqiyatli qo'shildi");
-                getOutcomeSocks(current - 1, pageSize);
+                message.success("Avans muvaffaqiyatli qo'shildi");
+                getResponseFunc(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Lavozim qo'shishda muammo bo'ldi");
+                message.error("Avansni qo'shishda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -86,18 +117,21 @@ const Turnstile = () => {
 
     const onEdit = (values, initial) => {
         setLoading(true);
+        const time = moment(values.date, "YYYY-MM-DD").toISOString()
         instance
-            .put(`api/turnstile/position?positionId=${initial.id}`, {
+            .put(`api/turnstile/prepayment/update/${initial.id}`, {
                 ...values,
+                id: initial.id,
+                date: time,
             })
             .then((res) => {
-                message.success("Lavozim muvaffaqiyatli taxrirlandi");
-                getOutcomeSocks(current - 1, pageSize);
+                message.success("Avans muvaffaqiyatli taxrirlandi");
+                getResponseFunc(current - 1, pageSize);
             })
             .catch(function (error) {
                 console.error("Error in edit: ", error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Lavozimni taxrirlashda muammo bo'ldi");
+                message.error("Avansni taxrirlashda muammo bo'ldi");
             })
             .finally(() => {
                 setLoading(false);
@@ -109,16 +143,16 @@ const Turnstile = () => {
         setLoading(true);
         arr.map((item) => {
             instance
-                .delete(`api/turnstile/position?positionId=${item}`)
+                .delete(`api/turnstile/prepayment/delete/${item}`)
                 .then((data) => {
-                    getOutcomeSocks(current - 1, pageSize);
-                    message.success("Lavozim muvaffaqiyatli o'chirildi");
+                    getResponseFunc(current - 1, pageSize);
+                    message.success("Avans muvaffaqiyatli o'chirildi");
                 })
                 .catch((error) => {
                     console.error(error);
                     if (error.response?.status === 500)
                         navigate("/server-error");
-                    message.error("Lavozimni o'chirishda muammo bo'ldi");
+                    message.error("Avansni o'chirishda muammo bo'ldi");
                 })
                 .finally(() => setLoading(false));
             return null;
@@ -131,13 +165,13 @@ const Turnstile = () => {
                 onEdit={onEdit}
                 onCreate={onCreate}
                 onDelete={handleDelete}
-                getData={getOutcomeSocks}
+                getData={getResponseFunc}
                 columns={columns}
-                tableData={outcomeSocks}
+                tableData={responseData}
                 current={current}
                 pageSize={pageSize}
-                totalItems={totalItems}
                 loading={loading}
+                totalItems={totalItems}
                 setLoading={setLoading}
                 setCurrent={setCurrent}
                 setPageSize={setPageSize}
@@ -147,4 +181,4 @@ const Turnstile = () => {
     );
 };
 
-export default Turnstile;
+export default Prepayment;

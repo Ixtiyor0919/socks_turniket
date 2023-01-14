@@ -1,11 +1,11 @@
 import { Drawer, Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
 import {
-    DashboardOutlined,
     TeamOutlined,
     ClockCircleOutlined,
     ScheduleOutlined,
     DollarCircleOutlined,
+    FileAddOutlined,
 } from "@ant-design/icons";
 import useToken from "../../Hook/UseToken";
 import turniketLogo from "./turniketLogo.jpeg";
@@ -30,6 +30,7 @@ function DrapdownMenu({ onClose, isVisible }) {
             size="200px"
             onClose={onClose}
             visible={isVisible}
+            onKeyDown={onClose}
         >
             <div
                 className="logo"
@@ -48,7 +49,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                         style={{ marginRight: "10%", borderRadius: '5px' }}
                     />
                     <h2 style={{ color: "#fff", margin: 0 }}>
-                        Socks Turnstile
+                        Turniket Admin
                     </h2>
                 </Link>
             </div>
@@ -60,23 +61,13 @@ function DrapdownMenu({ onClose, isVisible }) {
                 defaultOpenKeys={["others"]}
                 mode="inline"
                 theme="dark"
+                onMouseDown={onClose}
                 items={[
                     {
-                        label: "Bosh Sahifa",
+                        label: "Xodimlar",
                         key: "/",
                         icon: (
                             <Link to="/">
-                                <DashboardOutlined
-                                    style={{ fontSize: "18px" }}
-                                />
-                            </Link>
-                        ),
-                    },
-                    {
-                        label: "Ishchilar",
-                        key: "/Ishchilar",
-                        icon: (
-                            <Link to="/Ishchilar">
                                 <TeamOutlined style={{ fontSize: "18px" }} />
                             </Link>
                         ),
@@ -86,7 +77,7 @@ function DrapdownMenu({ onClose, isVisible }) {
                         key: "/Ish-vaqtlari",
                         icon: (
                             <Link to="/Ish-vaqtlari">
-                                <ClockCircleOutlined
+                                <ClockCircleOutlined 
                                     style={{ fontSize: "18px" }}
                                 />
                             </Link>
@@ -104,34 +95,25 @@ function DrapdownMenu({ onClose, isVisible }) {
                         ),
                     },
                     {
-                        label: "Oylar",
-                        key: "/Oylar",
+                        label: "Avans",
+                        key: "/Avans",
                         icon: (
-                            <Link to="/Oylar">
-                                <ScheduleOutlined
+                            <Link to="/Avans">
+                                <ScheduleOutlined 
                                     style={{ fontSize: "18px" }}
                                 />
                             </Link>
                         ),
                     },
-                    // {
-                    //     label: "Profil",
-                    //     key: "/profil",
-                    //     icon: (
-                    //         <Link to="/profil">
-                    //             <UserOutlined style={{ fontSize: "18px" }} />
-                    //         </Link>
-                    //     ),
-                    // },
-                    // {
-                    //     label: "Chiqish",
-                    //     key: "/logout",
-                    //     icon: (
-                    //         <div type="link" onClick={(e) => handleLogOut(e)}>
-                    //             <LogoutOutlined style={{ fontSize: "18px" }} />
-                    //         </div>
-                    //     ),
-                    // },
+                    {
+                        label: "Xarjatlar",
+                        key: "/Ishchilar-xarajatlari",
+                        icon: (
+                            <Link to="/Ishchilar-xarajatlari">
+                                <FileAddOutlined style={{ fontSize: "18px" }} />
+                            </Link>
+                        ),
+                    },
                 ]}
             />
         </Drawer>
@@ -139,3 +121,91 @@ function DrapdownMenu({ onClose, isVisible }) {
 }
 
 export default DrapdownMenu;
+// import PropTypes from 'prop-types';
+
+// // material-ui
+// import { useTheme } from '@mui/material/styles';
+// import { Box, Drawer, useMediaQuery } from '@mui/material';
+
+// // third-party
+// import PerfectScrollbar from 'react-perfect-scrollbar';
+// import { BrowserView, MobileView } from 'react-device-detect';
+
+// // project imports
+// import MenuList from './MenuList';
+// import LogoSection from '../LogoSection';
+// import MenuCard from './MenuCard';
+// import { drawerWidth } from 'store/constant';
+
+// // ==============================|| SIDEBAR DRAWER ||============================== //
+
+// const Sidebar = ({ drawerOpen, drawerToggle, window }) => {
+//     const theme = useTheme();
+//     const matchUpMd = useMediaQuery(theme.breakpoints.up('md'));
+
+//     const drawer = (
+//         <>
+//             <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+//                 <Box sx={{ display: 'flex', p: 2, mx: 'auto' }}>
+//                     <LogoSection />
+//                 </Box>
+//             </Box>
+//             <BrowserView>
+//                 <PerfectScrollbar
+//                     component="div"
+//                     style={{
+//                         height: !matchUpMd ? 'calc(100vh - 56px)' : 'calc(100vh - 88px)',
+//                         paddingLeft: '16px',
+//                         paddingRight: '16px'
+//                     }}
+//                 >
+//                     <MenuList />
+//                     <MenuCard />
+//                 </PerfectScrollbar>
+//             </BrowserView>
+//             <MobileView>
+//                 <Box sx={{ px: 2 }}>
+//                     <MenuList />
+//                     <MenuCard />
+//                 </Box>
+//             </MobileView>
+//         </>
+//     );
+
+//     const container = window !== undefined ? () => window.document.body : undefined;
+
+//     return (
+//         <Box component="nav" sx={{ flexShrink: { md: 0 }, width: matchUpMd ? drawerWidth : 'auto' }} aria-label="mailbox folders">
+//             <Drawer
+//                 container={container}
+//                 variant={matchUpMd ? 'persistent' : 'temporary'}
+//                 anchor="left"
+//                 open={drawerOpen}
+//                 onClose={drawerToggle}
+//                 sx={{
+//                     '& .MuiDrawer-paper': {
+//                         width: drawerWidth,
+//                         background: theme.palette.background.default,
+//                         color: theme.palette.text.primary,
+//                         borderRight: 'none',
+//                         [theme.breakpoints.up('md')]: {
+//                             top: '88px'
+//                         }
+//                     }
+//                 }}
+//                 ModalProps={{ keepMounted: true }}
+//                 color="inherit"
+//             >
+//                 {drawer}
+//             </Drawer>
+//         </Box>
+//     );
+// };
+
+// Sidebar.propTypes = {
+//     drawerOpen: PropTypes.bool,
+//     drawerToggle: PropTypes.func,
+//     window: PropTypes.object
+// };
+
+// export default Sidebar;

@@ -9,6 +9,7 @@ import {
     DollarCircleOutlined,
     ClockCircleOutlined,
     ScheduleOutlined,
+    FileAddOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import useToken from "../../Hook/UseToken";
@@ -60,7 +61,7 @@ function Navbar() {
                     alignItems: "center",
                 }}
             >
-                <div className="logo" style={{ marginRight: "5%" }}>
+                <div className="logo logo-navbar" style={{ marginRight: "5%" }}>
                     <Link to="/" style={{ display: "block" }}>
                         <img
                             src={turniketLogo}
@@ -79,24 +80,11 @@ function Navbar() {
                     mode="horizontal"
                     items={[
                         {
-                            label: "Bosh Sahifa",
+                            label: "Xodimlar",
                             key: "/",
                             icon: (
                                 <Link to="/">
-                                    <DashboardOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
-                                </Link>
-                            ),
-                        },
-                        {
-                            label: "Ishchilar",
-                            key: "/Ishchilar",
-                            icon: (
-                                <Link to="/Ishchilar">
-                                    <TeamOutlined
-                                        style={{ fontSize: "18px" }}
-                                    />
+                                    <TeamOutlined style={{ fontSize: "18px" }} />
                                 </Link>
                             ),
                         },
@@ -123,11 +111,22 @@ function Navbar() {
                             ),
                         },
                         {
-                            label: "Oylar",
-                            key: "/Oylar",
+                            label: "Avans",
+                            key: "/Avans",
                             icon: (
-                                <Link to="/Oylar">
+                                <Link to="/Avans">
                                     <ScheduleOutlined 
+                                        style={{ fontSize: "18px" }}
+                                    />
+                                </Link>
+                            ),
+                        },
+                        {
+                            label: "Xarjatlar",
+                            key: "/Ishchilar-xarajatlari",
+                            icon: (
+                                <Link to="/Ishchilar-xarajatlari">
+                                    <FileAddOutlined 
                                         style={{ fontSize: "18px" }}
                                     />
                                 </Link>
@@ -136,14 +135,14 @@ function Navbar() {
                     ]}
                 />
                 <span
-                    className="user inline-navber"
+                    className="user"
                     style={{
                         marginLeft: "auto",
                         display: "flex",
                         alignItems: "center",
                     }}
                 >
-                    {/* <Dropdown overlay={menu} placement="bottomRight" arrow>
+                    {/* <Dropdown overlay={menu} placement="bottomRight" arrow> */}
                         <Avatar
                             size="middle"
                             style={{
@@ -153,7 +152,7 @@ function Navbar() {
                         >
                             {"Admin".charAt(0)}
                         </Avatar>
-                    </Dropdown> */}
+                    {/* </Dropdown> */}
                 </span>
                 <div className="burger-menu">
                     <span

@@ -4,21 +4,30 @@ import { message } from "antd";
 import CustomTable from "../Module/Table/Table";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../Hook/UseData";
+import moment from "moment";
 
 const Salary = () => {
     const [responseData, setResponseData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const { workerData, monthData } = useData();
+    const [totalItems, setTotalItems] = useState(0);
+    const { workerData } = useData();
     const navigate = useNavigate();
 
-    const getResponseFunc = () => {
+    const getResponseFunc = (current, pageSize) => {
         setLoading(true);
         instance
-            .get(`api/turnstile/salary/list`)
+            .get(`api/turnstile/salary/page?page=${current}&size=${pageSize}`)
             .then((data) => {
-                setResponseData(data.data?.data);
+                const apiData = data.data?.data?.salaryPage.map((item) => {
+                    return {
+                        ...item,
+                        month: moment(item.month).format("YYYY-MM-DD"),
+                    };
+                });
+                setResponseData(apiData);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
@@ -28,12 +37,30 @@ const Salary = () => {
             .finally(() => setLoading(false));
     };
 
+    const getDateMonthFilter = (value, current, pageSize) => {
+        setLoading(true);
+        instance
+            .get(
+                `api/turnstile/salary/report?month=${moment(value).format("YYYY-MM-DD HH:MM:SS")}&page=${current}&size=${pageSize}`
+            )
+            .then((data) => {
+                    setResponseData(data.data?.data?.report);
+                    setTotalItems(data.data?.data?.totalItems);
+            })
+            .catch((error) => {
+                console.error(error);
+                if (error.response?.status === 500) navigate("/server-error");
+                message.error("Sana va ishchi bo'yicha yuklashda muammo bo'ldi");
+            })
+            .finally(() => setLoading(false));
+    };
+
     const columns = [
         {
-            title: "Ishchining ismi",
+            title: "Xodim",
             dataIndex: "workerId",
             key: "workerId",
-            width: "33%",
+            width: "13%",
             search: false,
             render: (record) => {
                 const data = workerData?.filter((item) => item.id === record);
@@ -50,30 +77,42 @@ const Salary = () => {
             },
         },
         {
-            title: "monthId",
-            dataIndex: "monthId",
-            key: "monthId",
-            width: "33%",
+            title: "Sana",
+            dataIndex: "month",
+            key: "month",
+            width: "13%",
             search: false,
-            render: (record) => {
-                const data = monthData?.filter((item) => item.id === record);
-                return data[0]?.name;
-            },
             sorter: (a, b) => {
-                if (a.monthId < b.monthId) {
+                if (a.month < b.month) {
                     return -1;
                 }
-                if (a.monthId > b.monthId) {
+                if (a.month > b.month) {
                     return 1;
                 }
                 return 0;
             },
         },
         {
-            title: "salary",
+            title: "Xarajatlar",
+            dataIndex: "expenses",
+            key: "expenses",
+            width: "13%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.expenses < b.expenses) {
+                    return -1;
+                }
+                if (a.expenses > b.expenses) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Ish haqi",
             dataIndex: "salary",
             key: "salary",
-            width: "33%",
+            width: "13%",
             search: false,
             sorter: (a, b) => {
                 if (a.salary < b.salary) {
@@ -85,6 +124,70 @@ const Salary = () => {
                 return 0;
             },
         },
+        {
+            title: "Tayinlangan ish haqi",
+            dataIndex: "assignedSalary",
+            key: "assignedSalary",
+            width: "13%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.assignedSalary < b.assignedSalary) {
+                    return -1;
+                }
+                if (a.assignedSalary > b.assignedSalary) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Ish haqi o'n foizda",
+            dataIndex: "salaryTenPercent",
+            key: "salaryTenPercent",
+            width: "13%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.salaryTenPercent < b.salaryTenPercent) {
+                    return -1;
+                }
+                if (a.salaryTenPercent > b.salaryTenPercent) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Umumiy oldindan to'lov",
+            dataIndex: "totalPrePayment",
+            key: "totalPrePayment",
+            width: "13%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.totalPrePayment < b.totalPrePayment) {
+                    return -1;
+                }
+                if (a.totalPrePayment > b.totalPrePayment) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+        {
+            title: "Jami ish kunlari",
+            dataIndex: "totalWorkDays",
+            key: "totalWorkDays",
+            width: "13%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.totalWorkDays < b.totalWorkDays) {
+                    return -1;
+                }
+                if (a.totalWorkDays > b.totalWorkDays) {
+                    return 1;
+                }
+                return 0;
+            },
+        }
     ];
 
     const onCreate = (values) => {
@@ -135,10 +238,12 @@ const Salary = () => {
                 onCreate={onCreate}
                 getData={getResponseFunc}
                 columns={columns}
+                getDateMonthFilter={getDateMonthFilter}
                 tableData={responseData}
                 current={current}
                 pageSize={pageSize}
                 loading={loading}
+                totalItems={totalItems}
                 setLoading={setLoading}
                 setCurrent={setCurrent}
                 setPageSize={setPageSize}

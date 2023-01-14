@@ -31,32 +31,56 @@ const CustomTable = (props) => {
         setPageSize,
         loading,
         timelySelect,
-        getDataTimely,
+        getDataFilter,
         pageSizeOptions,
         onCreate,
         onEdit,
         onDelete,
+        filterSelect,
+        getDateMonthFilter
     } = props;
     const [selectedRowKeys, setSelectedRowKeys] = useState([[], []]);
     const [searchText, setSearchText] = useState("");
     const [searchedColumn, setSearchedColumn] = useState("");
     const searchInput = useRef(null);
     const [dateFilt, setDateFilt] = useState(false);
+    const [selectFilt, setSelectFilt] = useState(false);
+    const [monthFilt, setMonthFilt] = useState(false);
     const [date, setDate] = useState([null, null]);
-    const { formData, user, branch } = useData();
+    const { formData, user, branch, workerData } = useData();
+    const [filters, setFilters] = useState(false);
+    const [workerFilters, setWorkerFilter] = useState(false);
+    const [selectValue, setSelect] = useState([]);
+    const [dateMonth, setDateMonth] = useState([]);
 
     const onChange = (pageNumber, page) => {
         setPageSize(page);
         setCurrent(pageNumber);
         dateFilt
             ? dateFilter(date, pageNumber - 1, page)
+            : selectFilt
+            ? getDataFilter(selectValue, date, pageNumber - 1, page)
+            : monthFilt
+            ? getDateMonthFilter(dateMonth, pageNumber - 1, page)
             : getData(pageNumber - 1, page);
     };
-
+    
     const handleChange = (value) => {
         setCurrent(1);
-        getDataTimely(value, 0, pageSize);
+        // getDataTimely(value, 0, pageSize);
     };
+
+    const handleFilterChange = (value) => {
+        if(value === "date") {
+            setFilters(formData.selectFilter)
+            setFilters(true)
+            setWorkerFilter(false)
+        } else if(value === "workerDate") {
+            setWorkerFilter(formData.workerFilter)
+            setFilters(false)
+            setWorkerFilter(true)
+        }
+    }
 
     const handleBranchChange = (value) => {
         setCurrent(1);
@@ -266,6 +290,193 @@ const CustomTable = (props) => {
                             ))}
                         </Select>
                     ) : null}
+                    {formData?.monthFilter ? (
+                        <>
+                            <DatePicker
+                                onChange={(e) => e ? setDateMonth(e) : null}
+                                style={{ marginRight: "15px" }}
+                                className="select-add"
+                            />
+                            <Space
+                                align="center"
+                                size="middle"
+                                className="tazalash"
+                            >
+                                <Button
+                                    className="add-button"
+                                    onClick={() => {
+                                        setMonthFilt(true)
+                                        setDateFilt(false);
+                                        setSelectFilt(false)
+                                        getDateMonthFilter(dateMonth, 0, pageSize);
+                                    }}
+                                    type="primary"
+                                    icon={<SearchOutlined />}
+                                >
+                                    Qidirish
+                                </Button>
+                                <Button
+                                    className="add-button"
+                                    onClick={() => {
+                                        setDateFilt(false);
+                                        setMonthFilt(false)
+                                        setSelectFilt(false)
+                                        getData(0, pageSize)
+                                    }}
+                                    type="primary"
+                                    icon={<RedoOutlined />}
+                                >
+                                    Tozalash
+                                </Button>
+                            </Space>
+                        </>   
+                    ) : null}
+                    {formData?.workerFilterInfo ? (
+                        <>
+                            <Select
+                                showSearch
+                                placeholder="Qidirish turi"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .includes(input.toLowerCase())
+                                }
+                                style={{
+                                width: 120,
+                                marginRight: "10px",
+                                }}
+                                className="select-add"
+                                onChange={handleFilterChange}
+                            >
+                                {filterSelect.map((item) => (
+                                    <Option key={item.value} value={item.value}>
+                                        {item.label}
+                                    </Option>
+                                ))}
+                            </Select>
+                            {filters ? (
+                                <>
+                                    <RangePicker
+                                        style={{ marginRight: "10px" }}
+                                        className="select-add"
+                                        disabledDate={disabledDate}
+                                        onChange={(val) =>
+                                            val
+                                                ? setDate([
+                                                    val[0].toISOString(),
+                                                    val[1].toISOString(),
+                                                ])
+                                                : null
+                                        }
+                                    />
+                                    <Space
+                                        align="center"
+                                        size="middle"
+                                        className="tazalash"
+                                    >
+                                        <Button
+                                            className="add-button"
+                                            onClick={() => {
+                                                setDateFilt(true);
+                                                setSelectFilt(false)
+                                                setMonthFilt(false)
+                                                dateFilter(date, 0, pageSize);
+                                            }}
+                                            type="primary"
+                                            icon={<SearchOutlined />}
+                                        >
+                                            Qidirish
+                                        </Button>
+                                        <Button
+                                            className="add-button"
+                                            onClick={() => {
+                                                setDateFilt(false);
+                                                setSelectFilt(false)
+                                                setMonthFilt(false)
+                                                getData(0, pageSize);
+                                            }}
+                                            type="primary"
+                                            icon={<RedoOutlined />}
+                                        >
+                                            Tozalash
+                                        </Button>
+                                    </Space>
+                                </>
+                            ):  null }
+                            {workerFilters ? ( 
+                                <>
+                                    <RangePicker
+                                        style={{ marginRight: "10px" }}
+                                        className="select-add"
+                                        disabledDate={disabledDate}
+                                        onChange={(val) =>
+                                            val
+                                                ? setDate([
+                                                    val[0].toISOString(),
+                                                    val[1].toISOString(),
+                                                ])
+                                                : null
+                                        }
+                                    />
+                                    <Select
+                                        showSearch
+                                        placeholder="Xodimni tanlang"
+                                        optionFilterProp="children"
+                                        filterOption={(input, option) =>
+                                            option.children
+                                                .toLowerCase()
+                                                .includes(input.toLowerCase())
+                                        }
+                                        style={{
+                                            width: 120,
+                                            marginRight: "10px",
+                                        }}
+                                        className="select-add"
+                                        onChange={(val) => val ? setSelect(val) : null}
+                                    >
+                                        {workerData.map((item) => (
+                                            <Option key={item.id} value={item.id}>
+                                                {item.fio}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                    <Space
+                                        align="center"
+                                        size="middle"
+                                        className="tazalash"
+                                    >
+                                        <Button
+                                            className="add-button"
+                                            onClick={() => {
+                                                setDateFilt(false)
+                                                setSelectFilt(true)
+                                                setMonthFilt(false)
+                                                getDataFilter(selectValue, date, 0, pageSize);
+                                            }}
+                                            type="primary"
+                                            icon={<SearchOutlined />}
+                                        >
+                                            Qidirish
+                                        </Button>
+                                        <Button
+                                            className="add-button"
+                                            onClick={() => {
+                                                setDateFilt(false);
+                                                setSelectFilt(false)
+                                                setMonthFilt(false)
+                                                getData(0, pageSize);
+                                            }}
+                                            type="primary"
+                                            icon={<RedoOutlined />}
+                                        >
+                                            Tozalash
+                                        </Button>
+                                    </Space>
+                                </>
+                                ) : null}
+                            </>
+                    ) : null}
                     {formData?.timeFilterInfo ? (
                         <>
                             <RangePicker
@@ -289,7 +500,7 @@ const CustomTable = (props) => {
                                 <Button
                                     className="add-button"
                                     onClick={() => {
-                                        setDateFilt(true);
+                                        setDateFilt(false);
                                         dateFilter(date, 0, pageSize);
                                     }}
                                     type="primary"
