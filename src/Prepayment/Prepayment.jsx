@@ -17,7 +17,6 @@ const Prepayment = () => {
 
     const getResponseFunc = (current, pageSize) => {
         setLoading(true);
-        console.log('current:', current,  'pageSize:', pageSize);
         instance
             .get(`api/turnstile/prepayment/page?page=${current}&size=${pageSize}`)
             .then((data) => {

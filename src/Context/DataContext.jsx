@@ -11,6 +11,7 @@ export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
     const [workerData, setWorkerData] = useState([]);
+    // const [monthData, setMonthData] = useState([]);
     let location = useLocation();
     const dateFormat = "YYYY/MM/DD";
     const formWorkerData = [
@@ -81,8 +82,11 @@ export const DataProvider = ({ children }) => {
                 //         '& fieldset': { top: 0 },
                 //     }}
                 // />
-                <DatePicker style={{ width: "100%" }} value={moment().format()}  />
-            )
+                <DatePicker
+                    style={{ width: "100%" }}
+                    value={moment().format()}
+                />
+            ),
         },
         {
             name: "hours",
@@ -114,25 +118,24 @@ export const DataProvider = ({ children }) => {
                 <TextField
                     format={dateFormat}
                     type="date"
-                    defaultValue={moment(defaultId).format()} 
+                    defaultValue={moment(defaultId).format()}
                     InputLabelProps={{
-                    shrink: true,
+                        shrink: true,
                     }}
                     sx={{
-                        width:'100%',
-                        '& legend': { display: 'none' },
-                        '& fieldset': { top: 0 },
+                        width: "100%",
+                        "& legend": { display: "none" },
+                        "& fieldset": { top: 0 },
                     }}
-                    />
+                />
                 //     <DatePicker
                 //         style={{ width: "100%" }}
                 //         defaultValue={moment(defaultId).format()}
                 //         format={dateFormat}
                 // />
-            )
+            ),
         },
         {
-
             name: "hours",
             label: "Soati",
             input: <Input style={{ width: "100%" }} />,
@@ -144,7 +147,8 @@ export const DataProvider = ({ children }) => {
             name: "workerId",
             label: "Xodim",
             input: (
-                <CustomSelect selectData={workerData?.map((item) => ({
+                <CustomSelect
+                    selectData={workerData?.map((item) => ({
                         ...item,
                         name: item.fio,
                     }))}
@@ -157,28 +161,28 @@ export const DataProvider = ({ children }) => {
             name: "month",
             label: "Sana",
             inputSelect: (defaultId = null) => {
-                return(
+                return (
                     <TextField
                         type="date"
                         format={dateFormat}
-                        defaultValue={moment(defaultId).format()} 
+                        defaultValue={moment(defaultId).format()}
                         InputLabelProps={{
-                        shrink: true,
+                            shrink: true,
                         }}
                         sx={{
-                            width:'100%',
-                            '& legend': { display: 'none' },
-                            '& fieldset': { top: 0 },
-                          }}
+                            width: "100%",
+                            "& legend": { display: "none" },
+                            "& fieldset": { top: 0 },
+                        }}
                     />
-                )
-            }
+                );
+            },
         },
         {
             name: "salary",
             label: "Ish haqi",
             input: <Input style={{ width: "100%" }} />,
-        }
+        },
     ];
 
     const prepaymentFormData = [
@@ -199,9 +203,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "date",
             label: "Sana",
-            input: (
-                <DatePicker style={{ width: "100%" }} value={moment()}  />
-            )
+            input: <DatePicker style={{ width: "100%" }} value={moment()} />,
         },
         {
             name: "summa",
@@ -230,22 +232,22 @@ export const DataProvider = ({ children }) => {
             name: "date",
             label: "Sana",
             inputSelect: (defaultId = null) => {
-                return(
+                return (
                     <TextField
                         type="date"
                         format={dateFormat}
-                        defaultValue={moment(defaultId).format()} 
+                        defaultValue={moment(defaultId).format()}
                         InputLabelProps={{
-                        shrink: true,
+                            shrink: true,
                         }}
                         sx={{
-                            width:'100%',
-                            '& legend': { display: 'none' },
-                            '& fieldset': { top: 0 },
-                          }}
+                            width: "100%",
+                            "& legend": { display: "none" },
+                            "& fieldset": { top: 0 },
+                        }}
                     />
-                )
-            }
+                );
+            },
         },
         {
             name: "summa",
@@ -277,9 +279,7 @@ export const DataProvider = ({ children }) => {
         {
             name: "date",
             label: "Sana",
-            input: (
-                <DatePicker style={{ width: "100%" }} value={moment()}  />
-            )
+            input: <DatePicker style={{ width: "100%" }} value={moment()} />,
         },
         {
             name: "summa",
@@ -299,8 +299,7 @@ export const DataProvider = ({ children }) => {
                     selectData={workerData?.map((item) => ({
                         ...item,
                         name: item.fio,
-                    }))
-                }
+                    }))}
                     DValue={defaultId}
                 />
             ),
@@ -314,22 +313,22 @@ export const DataProvider = ({ children }) => {
             name: "date",
             label: "Sana",
             inputSelect: (defaultId = null) => {
-                return(
+                return (
                     <TextField
                         type="date"
                         format={dateFormat}
-                        defaultValue={moment(defaultId).format()} 
+                        defaultValue={moment(defaultId).format()}
                         InputLabelProps={{
-                        shrink: true,
+                            shrink: true,
                         }}
                         sx={{
-                            width:'100%',
-                            '& legend': { display: 'none' },
-                            '& fieldset': { top: 0 },
-                          }}
+                            width: "100%",
+                            "& legend": { display: "none" },
+                            "& fieldset": { top: 0 },
+                        }}
                     />
-                )
-            }
+                );
+            },
         },
         {
             name: "summa",
@@ -347,8 +346,18 @@ export const DataProvider = ({ children }) => {
             .catch((err) => console.error(err));
     };
 
+    const getMonthData = () => {
+        instance
+            .get("api/turnstile/salary/list")
+            .then((data) => {
+                // setMonthData(data.data.data);
+            })
+            .catch((err) => console.error(err));
+    };
+
     useEffect(() => {
         getWorkerData();
+        getMonthData();
     }, []);
 
     let formData = {};

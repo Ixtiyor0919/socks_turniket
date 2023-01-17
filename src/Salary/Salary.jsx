@@ -39,18 +39,19 @@ const Salary = () => {
 
     const getDateMonthFilter = (value, current, pageSize) => {
         setLoading(true);
+        console.log(value, current, pageSize)
         instance
             .get(
                 `api/turnstile/salary/report?month=${moment(value).format("YYYY-MM-DD HH:MM:SS")}&page=${current}&size=${pageSize}`
             )
             .then((data) => {
-                    setResponseData(data.data?.data?.report);
-                    setTotalItems(data.data?.data?.totalItems);
+                setResponseData(data.data?.data?.report);
+                setTotalItems(data.data?.data?.totalItems);
             })
             .catch((error) => {
                 console.error(error);
                 if (error.response?.status === 500) navigate("/server-error");
-                message.error("Sana va ishchi bo'yicha yuklashda muammo bo'ldi");
+                message.error("Oy bo'yicha filterlangan maoshlarni yuklashda muammo bo'ldi");
             })
             .finally(() => setLoading(false));
     };
@@ -77,16 +78,49 @@ const Salary = () => {
             },
         },
         {
-            title: "Sana",
-            dataIndex: "month",
-            key: "month",
-            width: "13%",
+                title: "Sana",
+                dataIndex: "month",
+                key: "month",
+                width: "10%",
+                search: false,
+                sorter: (a, b) => {
+                    if (a.month < b.month) {
+                        return -1;
+                    }
+                    if (a.month > b.month) {
+                        return 1;
+                    }
+                    return 0;
+                }
+        },
+        {
+            title: "salaryMonth",
+            dataIndex: "salaryMonth",
+            key: "salaryMonth",
+            width: "8%",
             search: false,
             sorter: (a, b) => {
-                if (a.month < b.month) {
+                if (a.salaryMonth < b.salaryMonth) {
                     return -1;
                 }
-                if (a.month > b.month) {
+                if (a.salaryMonth > b.salaryMonth) {
+                    return 1;
+                }
+                return 0;
+            },
+        },
+
+        {
+            title: "Ish haqi",
+            dataIndex: "salary",
+            key: "salary",
+            width: "8%",
+            search: false,
+            sorter: (a, b) => {
+                if (a.salary < b.salary) {
+                    return -1;
+                }
+                if (a.salary > b.salary) {
                     return 1;
                 }
                 return 0;
@@ -103,22 +137,6 @@ const Salary = () => {
                     return -1;
                 }
                 if (a.expenses > b.expenses) {
-                    return 1;
-                }
-                return 0;
-            },
-        },
-        {
-            title: "Ish haqi",
-            dataIndex: "salary",
-            key: "salary",
-            width: "13%",
-            search: false,
-            sorter: (a, b) => {
-                if (a.salary < b.salary) {
-                    return -1;
-                }
-                if (a.salary > b.salary) {
                     return 1;
                 }
                 return 0;

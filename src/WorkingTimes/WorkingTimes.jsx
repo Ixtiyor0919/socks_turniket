@@ -17,7 +17,6 @@ const WorkingTimes = () => {
 
     const getOutcomeSocks = (current, pageSize) => {
         setLoading(true);
-        console.log('current:', current,  'pageSize:', pageSize);
         instance
             .get(
                 `api/turnstile/workingTimes/getAllPageable?page=${current}&size=${pageSize}`
@@ -42,6 +41,7 @@ const WorkingTimes = () => {
 
     const dateFilter = (date, current, pageSize) => {
         setLoading(true);
+        console.log(date, current, pageSize);
         instance
             .get(
                 `api/turnstile/workingTimes/workers?startDate=${moment(
@@ -59,7 +59,6 @@ const WorkingTimes = () => {
                         };
                     }
                 );
-                console.log(responseData);
                 setOutcomeSocks(responseData);
                 setTotalItems(data.data?.data?.totalItems);
             })

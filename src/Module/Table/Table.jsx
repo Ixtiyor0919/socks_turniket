@@ -58,9 +58,11 @@ const CustomTable = (props) => {
         setCurrent(pageNumber);
         dateFilt
             ? dateFilter(date, pageNumber - 1, page)
-            : selectFilt
+            : getData(pageNumber - 1, page)
+        selectFilt
             ? getDataFilter(selectValue, date, pageNumber - 1, page)
-            : monthFilt
+            : getData(pageNumber - 1, page)
+        monthFilt
             ? getDateMonthFilter(dateMonth, pageNumber - 1, page)
             : getData(pageNumber - 1, page);
     };
@@ -293,9 +295,13 @@ const CustomTable = (props) => {
                     {formData?.monthFilter ? (
                         <>
                             <DatePicker
-                                onChange={(e) => e ? setDateMonth(e) : null}
                                 style={{ marginRight: "15px" }}
                                 className="select-add"
+                                onChange={(val) =>
+                                val
+                                    ? setDateMonth(val.toISOString())
+                                    : null
+                                }
                             />
                             <Space
                                 align="center"
