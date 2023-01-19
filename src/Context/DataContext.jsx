@@ -404,7 +404,7 @@ export const DataProvider = ({ children }) => {
                 timeFilterInfo: false,
                 deleteInfo: false,
                 createInfo: false,
-                editInfo: true,
+                editInfo: false,
                 timelyInfo: false,
                 monthFilter: true,
                 editModalTitle: "O'zgartirish",

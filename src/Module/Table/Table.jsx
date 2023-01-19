@@ -311,8 +311,8 @@ const CustomTable = (props) => {
                                 <Button
                                     className="add-button"
                                     onClick={() => {
-                                        setMonthFilt(true)
-                                        setDateFilt(false);
+                                        setMonthFilt(true);
+                                        setDateFilt(false)
                                         setSelectFilt(false)
                                         getDateMonthFilter(dateMonth, 0, pageSize);
                                     }}

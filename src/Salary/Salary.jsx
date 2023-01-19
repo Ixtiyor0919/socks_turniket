@@ -45,6 +45,7 @@ const Salary = () => {
                 `api/turnstile/salary/report?month=${moment(value).format("YYYY-MM-DD HH:MM:SS")}&page=${current}&size=${pageSize}`
             )
             .then((data) => {
+                console.log(data.data?.data?.report);
                 setResponseData(data.data?.data?.report);
                 setTotalItems(data.data?.data?.totalItems);
             })

@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import {
     DashboardOutlined,
     MenuOutlined,
-    // UserOutlined,
-    // LogoutOutlined,
     TeamOutlined,
     DollarCircleOutlined,
     ClockCircleOutlined,
     ScheduleOutlined,
     FileAddOutlined,
+    UserOutlined,
+    LogoutOutlined,
 } from "@ant-design/icons";
 import { Link, useLocation } from "react-router-dom";
 import useToken from "../../Hook/UseToken";
@@ -40,6 +40,38 @@ function Navbar() {
     const onClose = () => {
         setIsVisible(false);
     };
+
+    const menu = (
+        <Menu
+            items={[
+                {
+                    key: "1",
+                    icon: <UserOutlined />,
+                    label: (
+                        <Link
+                            to="/profile"
+                            style={{ width: "100px", display: "inline-block" }}
+                        >
+                            Profile
+                        </Link>
+                    ),
+                },
+                {
+                    key: "2",
+                    danger: true,
+                    icon: <LogoutOutlined />,
+                    label: (
+                        <div
+                            onClick={(e) => handleLogOut(e)}
+                            style={{ width: "100px" }}
+                        >
+                            Chiqish
+                        </div>
+                    ),
+                },
+            ]}
+        />
+    );
 
     return (
         <Header
@@ -142,9 +174,9 @@ function Navbar() {
                         alignItems: "center",
                     }}
                 >
-                    {/* <Dropdown overlay={menu} placement="bottomRight" arrow> */}
+                    <Dropdown overlay={menu} placement="bottomRight" arrow>
                         <Avatar
-                            size="middle"
+                            size="large"
                             style={{
                                 color: "#f56a00",
                                 backgroundColor: "#fde3cf",
@@ -152,7 +184,7 @@ function Navbar() {
                         >
                             {"Admin".charAt(0)}
                         </Avatar>
-                    {/* </Dropdown> */}
+                    </Dropdown>
                 </span>
                 <div className="burger-menu">
                     <span

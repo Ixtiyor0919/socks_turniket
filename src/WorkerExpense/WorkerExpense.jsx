@@ -17,7 +17,6 @@ const WorkerExpense = () => {
 
     const getResponseFunc = (current, pageSize) => {
         setLoading(true);
-        console.log('current:', current,  'pageSize:', pageSize);
         instance
             .get(`api/turnstile/expense/page?page=${current}&size=${pageSize}`)
             .then((data) => {
